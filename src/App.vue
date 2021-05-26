@@ -60,10 +60,14 @@ export default Vue.extend({
       }
     },
   },
-  mounted() {
-    this.updateApiKeyValid()
-    this.updateLogFilePathReadable()
-    this.$store.dispatch('temp/updateName', this.$apollo.getClient())
+  async mounted() {
+    if (this.$store.state.config.logFilePath === '') {
+      await this.$store.dispatch('config/setLogFilePathFromPreset', 'STANDARD')
+    }
+
+    await this.updateApiKeyValid()
+    await this.updateLogFilePathReadable()
+    await this.$store.dispatch('temp/updateName', this.$apollo.getClient())
 
     window.ipcRenderer.on('logFileLine', async (event, line: string) => {
       if (
@@ -439,72 +443,6 @@ export default Vue.extend({
   watch: {
     async '$store.state.config.apiKey'() {
       await this.updateApiKeyValid()
-    },
-    async '$store.state.config.logFilePathPreset'() {
-      if (this.$store.state.config.logFilePathPreset === 'STANDARD') {
-        this.$store.commit('config/set', [
-          'logFilePath',
-          await window.ipcRenderer.invoke(
-            'pathJoin',
-            'appData',
-            '.minecraft',
-            'logs',
-            'latest.log'
-          ),
-        ])
-      } else if (
-        this.$store.state.config.logFilePathPreset === 'LUNAR_CLIENT'
-      ) {
-        this.$store.commit('config/set', [
-          'logFilePath',
-          await window.ipcRenderer.invoke(
-            'pathJoin',
-            'home',
-            '.lunarclient',
-            'offline',
-            '1.8',
-            'logs',
-            'latest.log'
-          ),
-        ])
-      } else if (
-        this.$store.state.config.logFilePathPreset === 'BADLION_CLIENT'
-      ) {
-        this.$store.commit('config/set', [
-          'logFilePath',
-          await window.ipcRenderer.invoke(
-            'pathJoin',
-            'appData',
-            '.minecraft',
-            'logs',
-            'blclient',
-            'minecraft',
-            'latest.log'
-          ),
-        ])
-      } else if (this.$store.state.config.logFilePathPreset === 'LABYMOD') {
-        this.$store.commit('config/set', [
-          'logFilePath',
-          await window.ipcRenderer.invoke(
-            'pathJoin',
-            'appData',
-            '.minecraft',
-            'logs',
-            'fml-client-latest.log'
-          ),
-        ])
-      } else if (this.$store.state.config.logFilePathPreset === 'PVPLOUNGE') {
-        this.$store.commit('config/set', [
-          'logFilePath',
-          await window.ipcRenderer.invoke(
-            'pathJoin',
-            'appData',
-            '.pvplounge',
-            'logs',
-            'latest.log'
-          ),
-        ])
-      }
     },
     async '$store.state.config.logFilePath'() {
       await window.ipcRenderer.send('logFileSet', null)
