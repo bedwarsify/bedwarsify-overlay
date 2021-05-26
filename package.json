@@ -1,0 +1,94 @@
+{
+  "name": "bedwarsify-overlay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A simple but feature-rich Hypixel Bed Wars anti-sniping overlay.",
+  "homepage": "https://bedwarsify.com",
+  "author": {
+    "name": "Jakub Meysner",
+    "email": "hello@jakubmeysner.me",
+    "url": "https://jakubmeysner.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bedwarsify/bedwarsify-overlay.git"
+  },
+  "scripts": {
+    "serve": "vue-cli-service electron:serve",
+    "build": "vue-cli-service electron:build",
+    "lint": "vue-cli-service lint",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "@logdna/tail-file": "^2.0.6",
+    "@zikeji/hypixel": "^3.1.1",
+    "axios": "^0.21.1",
+    "electron-updater": "^4.3.9",
+    "electron-window-state": "^5.0.3",
+    "prismarine-nbt": "^1.5.0",
+    "vue": "^2.6.11",
+    "vue-apollo": "^3.0.0-beta.11",
+    "vue-router": "^3.2.0",
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^4.0.0-beta.3"
+  },
+  "devDependencies": {
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "autoprefixer": "^9.8.6",
+    "electron": "^12.0.0",
+    "electron-devtools-installer": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "graphql-tag": "^2.9.0",
+    "node-sass": "^4.12.0",
+    "postcss": "^7.0.35",
+    "prettier": "^2.2.1",
+    "sass-loader": "^8.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
+    "typescript": "~4.1.5",
+    "vue-cli-plugin-apollo": "~0.22.2",
+    "vue-cli-plugin-electron-builder": "~2.0.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended",
+      "@vue/typescript/recommended",
+      "@vue/prettier",
+      "@vue/prettier/@typescript-eslint"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-explicit-any": "off"
+    }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "engines": {
+    "node": "14",
+    "npm": "7"
+  }
+}

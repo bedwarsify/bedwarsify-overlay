@@ -1,0 +1,14 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    assignees:
+      - jakubmeysner
+    reviewers:
+      - jakubmeysner
+    commit-message:
+      prefix: chore
+      include: scope

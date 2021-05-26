@@ -1,0 +1,3 @@
+button, input, select, option {
+  @apply focus:outline-none;
+}

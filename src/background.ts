@@ -1,0 +1,284 @@
+import { app, protocol, BrowserWindow, ipcMain, shell, dialog } from 'electron'
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import path from 'path'
+import axios, { AxiosRequestConfig } from 'axios'
+import {
+  Client as HypixelClient,
+  Components,
+  getBedwarsLevelInfo,
+  getPlayerRank,
+} from '@zikeji/hypixel'
+import fs from 'fs'
+import TailFile from '@logdna/tail-file'
+import readline from 'readline'
+import { autoUpdater } from 'electron-updater'
+import windowStateKeeper from 'electron-window-state'
+
+const wait = (delay: number) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, delay)
+  })
+
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'app', privileges: { secure: true, standard: true } },
+])
+
+let win: BrowserWindow | null = null
+
+let discordAuthWin: BrowserWindow | null = null
+
+async function createWindow() {
+  const winState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 600,
+  })
+
+  win = new BrowserWindow({
+    width: winState.width,
+    height: winState.height,
+    x: winState.x,
+    y: winState.y,
+    frame: false,
+    transparent: true,
+    alwaysOnTop: true,
+    maximizable: false,
+    fullscreenable: false,
+    webPreferences: {
+      nodeIntegration: process.env
+        .ELECTRON_NODE_INTEGRATION as unknown as boolean,
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      devTools: false,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  })
+
+  winState.manage(win)
+
+  win.setAlwaysOnTop(true, 'screen-saver')
+
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
+    if (!process.env.IS_TEST) win.webContents.openDevTools()
+  } else {
+    createProtocol('app')
+    await win.loadURL('app://./index.html')
+    await autoUpdater.checkForUpdatesAndNotify()
+  }
+}
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', async () => {
+  if (BrowserWindow.getAllWindows().length === 0) await createWindow()
+})
+
+if (process.platform === 'linux') {
+  app.disableHardwareAcceleration()
+}
+
+app.on('ready', async () => {
+  if (process.platform === 'linux') {
+    await wait(300)
+  }
+
+  if (isDevelopment && !process.env.IS_TEST) {
+    try {
+      await installExtension(VUEJS_DEVTOOLS)
+    } catch (e) {
+      console.error('Vue Devtools failed to install:', e.toString())
+    }
+  }
+
+  await createWindow()
+})
+
+if (isDevelopment) {
+  if (process.platform === 'win32') {
+    process.on('message', (data) => {
+      if (data === 'graceful-exit') {
+        app.quit()
+      }
+    })
+  } else {
+    process.on('SIGTERM', () => {
+      app.quit()
+    })
+  }
+}
+
+ipcMain.on('winMinimize', () => {
+  win?.minimize()
+})
+
+ipcMain.on('winClose', () => {
+  win?.close()
+})
+
+ipcMain.on('discordAuthStart', async () => {
+  discordAuthWin = new BrowserWindow({
+    width: 1280,
+    height: 720,
+    show: false,
+    alwaysOnTop: true,
+    autoHideMenuBar: true,
+  })
+
+  win?.setAlwaysOnTop(true, 'status')
+  discordAuthWin.setAlwaysOnTop(true, 'screen-saver')
+  await discordAuthWin.loadURL(
+    `https://discord.com/api/oauth2/authorize?client_id=${process.env.VUE_APP_DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost&response_type=code&scope=identify`
+  )
+  discordAuthWin.show()
+
+  discordAuthWin.webContents.on('will-navigate', (event, newUrl) => {
+    const parsedUrl = new URL(newUrl)
+
+    if (parsedUrl.hostname === 'localhost') {
+      win?.webContents.send(
+        'discordAuthCode',
+        parsedUrl.searchParams.get('code')
+      )
+      discordAuthWin?.close()
+      discordAuthWin = null
+    }
+  })
+
+  discordAuthWin.on('close', () => {
+    const url = discordAuthWin!.webContents.getURL()
+    const parsedUrl = new URL(url)
+
+    win?.webContents.send(
+      'discordAuthEnd',
+      parsedUrl.hostname === 'localhost'
+        ? parsedUrl.searchParams.get('code')
+        : null
+    )
+  })
+})
+
+ipcMain.on('openExternal', async (event, url) => {
+  await shell.openExternal(url)
+})
+
+ipcMain.handle(
+  'axios',
+  async (
+    event,
+    url: string,
+    config: AxiosRequestConfig,
+    validStatuses: number[] | undefined
+  ) => {
+    const response = await axios(
+      url,
+      validStatuses === undefined
+        ? config
+        : {
+            ...config,
+            validateStatus: (status) => validStatuses?.includes(status),
+          }
+    )
+
+    return {
+      data: response.data,
+      status: response.status,
+    }
+  }
+)
+
+ipcMain.handle(
+  'hypixel',
+  async (
+    event,
+    key: string,
+    resource: 'key' | 'player.uuid' | 'guild.player',
+    ...args: any[]
+  ) => {
+    const client = new HypixelClient(key)
+
+    if (resource === 'key') {
+      return await client.key()
+    } else if (resource === 'player.uuid') {
+      const [uuid] = args as [string]
+      return await client.player.uuid(uuid)
+    } else if (resource === 'guild.player') {
+      const [player] = args as [string]
+      return await client.guild.player(player)
+    }
+  }
+)
+
+ipcMain.handle(
+  'hypixelUtils',
+  async (event, resource: 'getPlayerRank', ...args: any[]) => {
+    if (resource === 'getPlayerRank') {
+      const [player, onlyPackages] = args as [
+        Components.Schemas.Player,
+        boolean | undefined
+      ]
+
+      return getPlayerRank(player, onlyPackages)
+    } else if (resource === 'getBedwarsLevelInfo') {
+      const [player] = args as [Components.Schemas.Player]
+
+      return getBedwarsLevelInfo(player)
+    }
+  }
+)
+
+ipcMain.handle('openFileLog', async () => {
+  return await dialog.showOpenDialog(win!, {
+    defaultPath: app.getPath('appData'),
+    filters: [
+      {
+        name: 'Logs',
+        extensions: ['log'],
+      },
+    ],
+    properties: ['openFile'],
+  })
+})
+
+ipcMain.handle(
+  'pathJoin',
+  async (event, base: 'userData' | 'appData', ...pathElements: string[]) => {
+    return path.join(app.getPath(base), ...pathElements)
+  }
+)
+
+ipcMain.handle('fileReadable', async (event, path: string) => {
+  return await fs.promises
+    .access(path, fs.constants.R_OK)
+    .then(() => true)
+    .catch(() => false)
+})
+
+let logFileTail: TailFile | null = null
+let logFileReadline: readline.Interface | null = null
+
+ipcMain.on('logFileSet', async (event, path: string) => {
+  logFileReadline?.close()
+  logFileReadline = null
+
+  await logFileTail?.quit()
+  logFileTail = null
+
+  if (path !== null) {
+    logFileTail = new TailFile(path)
+    await logFileTail.start()
+
+    logFileReadline = readline.createInterface({
+      input: logFileTail,
+    })
+
+    logFileReadline.on('line', (line) => {
+      win?.webContents.send('logFileLine', line)
+    })
+  }
+})

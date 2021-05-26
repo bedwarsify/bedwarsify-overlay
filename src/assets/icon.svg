@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 762 554" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-131,-235)">
+        <g id="Bed" transform="matrix(0.928965,0,0,0.928965,36.3698,36.3698)">
+            <path d="M204.867,662.398L154.804,637.67L154.563,699.701L204.736,673.415L204.867,662.398Z" style="fill:rgb(74,38,0);"/>
+            <path d="M921.6,349.315L784.973,416.924L784.973,500.028L921.6,432.418L921.6,349.315Z" style="fill:rgb(234,234,234);"/>
+            <path d="M512,281.445L102.4,484.273L374.557,622.569L784.973,416.924L512,281.445Z" style="fill:rgb(200,0,40);"/>
+            <path d="M649.754,213.835L512,281.445L784.973,416.924L921.6,349.315L649.754,213.835Z" style="fill:white;"/>
+            <path d="M784.973,500.028L784.973,416.924L374.557,622.569L374.557,704.264L784.973,500.028Z" style="fill:rgb(160,0,32);"/>
+            <g transform="matrix(-1,0,0,1,1159.53,204.237)">
+                <path d="M1057.13,280.036L784.973,416.924L784.973,500.028L1057.13,369.034L1057.13,280.036Z" style="fill:rgb(160,0,32);"/>
+            </g>
+            <g transform="matrix(-1,0,0,1,1159.53,287.601)">
+                <path d="M1057.13,285.67L784.973,416.663L784.973,522.564L834.206,498.378L834.347,434.224L1004.73,350.07L1004.97,412.1L1057.13,386.043L1057.13,285.67Z" style="fill:rgb(102,52,0);"/>
+            </g>
+            <path d="M921.6,432.418L374.557,704.264L374.557,810.165L427.689,784.04L427.674,721.837L869.396,500.028L869.674,563.079L921.6,536.875L921.6,432.418Z" style="fill:rgb(102,52,0);"/>
+            <path d="M869.396,500.028L819.225,525.22L819.297,537.119L869.674,563.079L869.396,500.028Z" style="fill:rgb(74,38,0);"/>
+        </g>
+    </g>
+</svg>
