@@ -22,10 +22,10 @@ jobs:
         run: npm i -g npm@7
       - name: Install snapcraft
         run: snap install snapcraft --classic
-        if: matrix.os == 'ubuntu_latest'
+        if: matrix.os == 'ubuntu-latest'
       - name: Login to snapcraft
         run: echo "$SNAP_TOKEN" | snapcraft login --with -
-        if: matrix.os == 'ubuntu_latest'
+        if: matrix.os == 'ubuntu-latest'
         env:
           SNAP_TOKEN: ${{ secrets.SNAP_TOKEN }}
       - name: Install dependencies
