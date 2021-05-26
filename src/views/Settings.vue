@@ -236,10 +236,10 @@
               class="bg-transparent"
               :value="$store.state.config.logFilePathPreset"
               @change="
-                $store.commit('config/set', [
-                  'logFilePathPreset',
-                  $event.target.value,
-                ])
+                $store.dispatch(
+                  'config/setLogFilePathFromPreset',
+                  $event.target.value
+                )
               "
             >
               <option value="STANDARD" class="bg-gray-900">Standard</option>

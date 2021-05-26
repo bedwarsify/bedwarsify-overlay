@@ -73,6 +73,81 @@ export default new Vuex.Store({
           state[key] = newValue
         },
       },
+      actions: {
+        async setLogFilePathFromPreset(
+          { commit, state },
+          preset:
+            | 'STANDARD'
+            | 'LUNAR_CLIENT'
+            | 'BADLION_CLIENT'
+            | 'LABYMOD'
+            | 'PVPLOUNGE'
+            | 'CUSTOM'
+        ) {
+          state.logFilePathPreset = preset
+
+          if (preset === 'STANDARD') {
+            commit('set', [
+              'logFilePath',
+              await window.ipcRenderer.invoke(
+                'pathJoin',
+                'appData',
+                '.minecraft',
+                'logs',
+                'latest.log'
+              ),
+            ])
+          } else if (preset === 'LUNAR_CLIENT') {
+            commit('set', [
+              'logFilePath',
+              await window.ipcRenderer.invoke(
+                'pathJoin',
+                'home',
+                '.lunarclient',
+                'offline',
+                '1.8',
+                'logs',
+                'latest.log'
+              ),
+            ])
+          } else if (preset === 'BADLION_CLIENT') {
+            commit('set', [
+              'logFilePath',
+              await window.ipcRenderer.invoke(
+                'pathJoin',
+                'appData',
+                '.minecraft',
+                'logs',
+                'blclient',
+                'minecraft',
+                'latest.log'
+              ),
+            ])
+          } else if (preset === 'LABYMOD') {
+            commit('set', [
+              'logFilePath',
+              await window.ipcRenderer.invoke(
+                'pathJoin',
+                'appData',
+                '.minecraft',
+                'logs',
+                'fml-client-latest.log'
+              ),
+            ])
+          } else if (preset === 'PVPLOUNGE') {
+            commit('set', [
+              'logFilePath',
+              await window.ipcRenderer.invoke(
+                'pathJoin',
+                'appData',
+                '.pvplounge',
+                'logs',
+                'latest.log'
+              ),
+            ])
+          }
+        },
+      },
       namespaced: true,
     },
     temp: {
