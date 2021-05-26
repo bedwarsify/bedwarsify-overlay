@@ -33,4 +33,4 @@ jobs:
       - name: Publish
         run: npm run build - -p always -c.snap.publish.channels=stable
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASES_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASES_GITHUB_TOKEN }}
