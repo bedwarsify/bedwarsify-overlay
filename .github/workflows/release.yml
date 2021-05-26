@@ -21,7 +21,7 @@ jobs:
       - name: Install npm@7
         run: npm i -g npm@7
       - name: Install snapcraft
-        run: snap install snapcraft --classic
+        run: sudo snap install snapcraft --classic
         if: matrix.os == 'ubuntu-latest'
       - name: Login to snapcraft
         run: echo "$SNAP_TOKEN" | snapcraft login --with -
