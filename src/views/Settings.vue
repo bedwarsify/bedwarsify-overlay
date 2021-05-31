@@ -8,7 +8,7 @@
 
     <div class="space-y-5">
       <div class="flex space-x-4">
-        <div>Bedwarsify Overlay v1.0.1</div>
+        <div>Bedwarsify Overlay v1.1.0</div>
 
         <button
           @click="openExternal('https://bedwarsify.com')"
