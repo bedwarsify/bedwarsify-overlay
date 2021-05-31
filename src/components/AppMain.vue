@@ -412,7 +412,7 @@
 
                     player.hypixelPlayerRank.cleanName === 'MVP++'
                       ? 'text-minecraft-' +
-                        player.hypixelPlayer.monthlyRankColor
+                        (player.hypixelPlayer.monthlyRankColor || 'gold')
                           .toLowerCase()
                           .replace('_', '-')
                       : '',
