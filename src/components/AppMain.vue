@@ -779,6 +779,12 @@
               </template>
 
               <template
+                v-else-if="error.message === 'GraphQL error: You cannot report'"
+              >
+                You cannot report!
+              </template>
+
+              <template
                 v-else-if="
                   error.message === 'GraphQL error: You cannot report yourself'
                 "
