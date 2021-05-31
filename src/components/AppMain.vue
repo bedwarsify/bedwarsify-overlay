@@ -194,7 +194,11 @@
                 >
                   <template v-slot="{ result: { data } }">
                     <template
-                      v-if="data !== null && data.userByMinecraftId !== null"
+                      v-if="
+                        data !== null &&
+                        data.userByMinecraftId !== null &&
+                        data.userByMinecraftId !== undefined
+                      "
                     >
                       <template>
                         <span
@@ -448,7 +452,9 @@
                     },
                     {
                       value:
-                        player.hypixelBedwarsLevelInfo.level *
+                        ((player.hypixelBedwarsLevelInfo &&
+                          player.hypixelBedwarsLevelInfo.level) ||
+                          0) *
                         (player.hypixelPlayer.stats.Bedwars[
                           $store.getters['config/modePrefix'] +
                             'final_kills_bedwars'
@@ -510,6 +516,7 @@
                           !(
                             data !== null &&
                             data.userByMinecraftId !== null &&
+                            data.userByMinecraftId !== undefined &&
                             ['DEVELOPER', 'COMMUNITY_MANAGER'].includes(
                               data.userByMinecraftId.role
                             )
@@ -866,24 +873,24 @@ export default Vue.extend({
               } else {
                 return (
                   b.hypixelBedwarsLevelInfo.level *
-                    (b.hypixelPlayer.stats.Bedwars[
+                    ((b.hypixelPlayer.stats.Bedwars[
                       this.$store.getters['config/modePrefix'] +
                         'final_kills_bedwars'
-                    ] /
+                    ] ?? 0) /
                       (b.hypixelPlayer.stats.Bedwars[
                         this.$store.getters['config/modePrefix'] +
                           'final_deaths_bedwars'
-                      ] ?? 1)) **
+                      ] || 1)) **
                       2 -
                   a.hypixelBedwarsLevelInfo.level *
-                    (a.hypixelPlayer.stats.Bedwars[
+                    ((a.hypixelPlayer.stats.Bedwars[
                       this.$store.getters['config/modePrefix'] +
                         'final_kills_bedwars'
-                    ] /
+                    ] ?? 0) /
                       (a.hypixelPlayer.stats.Bedwars[
                         this.$store.getters['config/modePrefix'] +
                           'final_deaths_bedwars'
-                      ] ?? 1)) **
+                      ] || 1)) **
                       2
                 )
               }
