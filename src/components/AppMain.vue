@@ -183,6 +183,8 @@
                           id
                           minecraftId
                           role
+                          customTagText
+                          customTagColor
                           reportsSummary
                         }
                       }
@@ -201,6 +203,18 @@
                       "
                     >
                       <template>
+                        <span
+                          v-if="data.userByMinecraftId.customTagText !== null"
+                          :style="
+                            'color: #' +
+                              data.userByMinecraftId.customTagColor.toString(
+                                16
+                              ) || 'ffffff'
+                          "
+                        >
+                          [{{ data.userByMinecraftId.customTagText }}]
+                        </span>
+
                         <span
                           v-if="data.userByMinecraftId.role === 'DEVELOPER'"
                           class="text-blue-500"
