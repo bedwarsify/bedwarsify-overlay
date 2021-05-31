@@ -293,7 +293,78 @@
                 </span>
 
                 <span
+                  v-if="player.hypixelPlayer.prefix !== undefined"
+                  :style="'color: #' + player.hypixelPlayerRank.colorHex"
+                >
+                  {{ player.hypixelPlayer.prefix.replace(/§./g, '') }}
+                  {{ player.hypixelPlayer.displayname }}
+                </span>
+
+                <span
+                  v-else-if="player.hypixelPlayer.rank === 'GAME_MASTER'"
+                  class="text-minecraft-green"
+                >
+                  [GM] {{ player.hypixelPlayer.displayname }}
+                </span>
+
+                <span
+                  v-else-if="player.hypixelPlayerRank.cleanName === 'YOUTUBER'"
+                  class="inline-flex"
+                >
+                  <span class="text-minecraft-red">[</span>
+                  <span class="text-minecraft-white">YOUTUBE</span>
+                  <span class="text-minecraft-red"
+                    >] {{ player.hypixelPlayer.displayname }}</span
+                  >
+                </span>
+
+                <span
+                  v-else-if="player.hypixelPlayerRank.cleanName.includes('+')"
+                  :class="[
+                    'inline-flex',
+
+                    player.hypixelPlayerRank.cleanName === 'MVP++'
+                      ? 'text-minecraft-' +
+                        player.hypixelPlayer.monthlyRankColor
+                          .toLowerCase()
+                          .replace('_', '-')
+                      : '',
+                  ]"
+                  :style="
+                    player.hypixelPlayerRank.cleanName !== 'MVP++'
+                      ? 'color: #' + player.hypixelPlayerRank.colorHex
+                      : ''
+                  "
+                >
+                  <span>
+                    {{
+                      player.hypixelPlayerRank.cleanPrefix.replace(/\+.+$/, '')
+                    }}
+                  </span>
+
+                  <span
+                    :class="
+                      'text-minecraft-' +
+                      (player.hypixelPlayer.rankPlusColor || 'gold')
+                        .toLowerCase()
+                        .replace('_', '-')
+                    "
+                  >
+                    <template
+                      v-if="player.hypixelPlayerRank.cleanName === 'MVP++'"
+                    >
+                      ++
+                    </template>
+
+                    <template v-else> + </template>
+                  </span>
+
+                  <span>] {{ player.hypixelPlayer.displayname }}</span>
+                </span>
+
+                <span
                   :style="{ color: '#' + player.hypixelPlayerRank.colorHex }"
+                  v-else
                 >
                   {{
                     player.hypixelPlayerRank.cleanPrefix !== ''
