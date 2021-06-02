@@ -589,10 +589,7 @@
                   }}
                 </td>
 
-                <td
-                  class="flex justify-center items-center"
-                  style="height: 1.625rem"
-                >
+                <td>
                   <apollo-query
                     :query="
                       (gql) => gql`
@@ -610,6 +607,7 @@
                       minecraftId: player.id,
                     }"
                     v-if="player.id"
+                    class="flex justify-center items-center"
                   >
                     <template v-slot="{ result: { data } }">
                       <button
@@ -631,7 +629,7 @@
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
+                          class="h-4 w-4"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                         >
