@@ -8,11 +8,7 @@
 
     <div class="space-y-5">
       <div class="flex space-x-4">
-        <div>
-          Bedwarsify Overlay
-
-          <span v-if="version">v{{ version }}</span>
-        </div>
+        <div>Bedwarsify Overlay v{{ version }}</div>
 
         <button
           @click="openExternal('https://bedwarsify.com')"
@@ -445,13 +441,10 @@ import { onLogout } from '@/vue-apollo'
 import Vue from 'vue'
 
 export default Vue.extend({
-  data() {
-    return {
-      version: null,
-    }
-  },
-  async mounted() {
-    this.version = await window.ipcRenderer.invoke('getVersion')
+  computed: {
+    version() {
+      return process.env.VUE_APP_VERSION
+    },
   },
   methods: {
     async logOut() {

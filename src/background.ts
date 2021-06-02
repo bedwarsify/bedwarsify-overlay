@@ -286,5 +286,3 @@ ipcMain.on('logFileSet', async (event, path: string) => {
     })
   }
 })
-
-ipcMain.handle('getVersion', async () => app.getVersion())

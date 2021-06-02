@@ -41,8 +41,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
       return ipcRenderer.invoke(channel, ...args)
     } else if (channel === 'fileReadable') {
       return ipcRenderer.invoke(channel, ...args)
-    } else if (channel === 'getVersion') {
-      return ipcRenderer.invoke(channel)
     }
   },
 })
