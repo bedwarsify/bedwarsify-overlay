@@ -48,8 +48,8 @@
               "
             >
               <template v-slot="{ result: { loading, error, data } }">
-                <template v-if="data !== null">
-                  <div class="flex" v-if="data.session !== null">
+                <template v-if="data">
+                  <div class="flex" v-if="data.session">
                     <div class="mr-2">{{ $store.state.temp.name }}</div>
 
                     <div>

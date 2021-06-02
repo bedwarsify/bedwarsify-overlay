@@ -173,7 +173,7 @@
               <td v-for="i in 6" :key="i">?</td>
             </template>
 
-            <template v-else-if="player.hypixelPlayer !== null">
+            <template v-else-if="player.hypixelPlayer">
               <td>
                 <apollo-query
                   :query="
@@ -193,23 +193,24 @@
                   :variables="{
                     minecraftId: player.id,
                   }"
+                  v-if="player.id"
                 >
                   <template v-slot="{ result: { data } }">
                     <template
                       v-if="
-                        data !== null &&
-                        data.userByMinecraftId !== null &&
-                        data.userByMinecraftId !== undefined
+                        data && data.userByMinecraftId && data.userByMinecraftId
                       "
                     >
                       <template>
                         <span
-                          v-if="data.userByMinecraftId.customTagText !== null"
+                          v-if="data.userByMinecraftId.customTagText"
                           :style="
-                            'color: #' +
+                            ('color: #' +
+                              data.userByMinecraftId.customTagColor &&
                               data.userByMinecraftId.customTagColor.toString(
                                 16
-                              ) || 'ffffff'
+                              )) ||
+                            'ffffff'
                           "
                         >
                           [{{ data.userByMinecraftId.customTagText }}]
@@ -295,8 +296,7 @@
               <td class="inline-flex space-x-1 justify-center">
                 <span
                   v-if="
-                    player.hypixelBedwarsLevelInfo !== null &&
-                    player.hypixelBedwarsLevelInfo !== undefined &&
+                    player.hypixelBedwarsLevelInfo &&
                     player.hypixelBedwarsLevelInfo.level >= 1000
                   "
                   class="inline-flex"
@@ -394,7 +394,7 @@
                 </span>
 
                 <span
-                  v-if="player.hypixelPlayer.prefix !== undefined"
+                  v-if="player.hypixelPlayer.prefix"
                   :style="'color: #' + player.hypixelPlayerRank.colorHex"
                 >
                   {{ player.hypixelPlayer.prefix.replace(/§./g, '') }}
@@ -491,7 +491,12 @@
                 </span>
               </td>
 
-              <template v-if="player.hypixelPlayer.stats.Bedwars !== undefined">
+              <template
+                v-if="
+                  player.hypixelPlayer.stats &&
+                  player.hypixelPlayer.stats.Bedwars
+                "
+              >
                 <td
                   v-for="stat in [
                     {
@@ -604,6 +609,7 @@
                     :variables="{
                       minecraftId: player.id,
                     }"
+                    v-if="player.id"
                   >
                     <template v-slot="{ result: { data } }">
                       <button
@@ -611,9 +617,8 @@
                           !player.hypixelPlayerRank.staff &&
                           player.hypixelPlayerRank.cleanName !== 'YOUTUBER' &&
                           !(
-                            data !== null &&
-                            data.userByMinecraftId !== null &&
-                            data.userByMinecraftId !== undefined &&
+                            data &&
+                            data.userByMinecraftId &&
                             ['DEVELOPER', 'COMMUNITY_MANAGER'].includes(
                               data.userByMinecraftId.role
                             )
@@ -1086,87 +1091,87 @@ export default Vue.extend({
                 )
               } else if (this.$store.state.config.sortBy === 'WS') {
                 return (
-                  (b.hypixelPlayer?.stats?.Bedwars[
+                  (b.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'winstreak'
                   ] ?? 0) -
-                  (a.hypixelPlayer?.stats?.Bedwars[
+                  (a.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'winstreak'
                   ] ?? 0)
                 )
               } else if (this.$store.state.config.sortBy === 'FKDR') {
                 return (
-                  (b.hypixelPlayer?.stats.Bedwars[
+                  (b.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] +
                       'final_kills_bedwars'
                   ] ?? 0) /
-                    (b.hypixelPlayer?.stats.Bedwars[
+                    (b.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'final_deaths_bedwars'
                     ] || 1) -
-                  (a.hypixelPlayer?.stats.Bedwars[
+                  (a.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] +
                       'final_kills_bedwars'
                   ] ?? 0) /
-                    (a.hypixelPlayer?.stats.Bedwars[
+                    (a.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'final_deaths_bedwars'
                     ] || 1)
                 )
               } else if (this.$store.state.config.sortBy === 'WLR') {
                 return (
-                  (b.hypixelPlayer?.stats.Bedwars[
+                  (b.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'wins_bedwars'
                   ] ?? 0) /
-                    (b.hypixelPlayer?.stats.Bedwars[
+                    (b.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'losses_bedwars'
                     ] || 1) -
-                  (a.hypixelPlayer?.stats.Bedwars[
+                  (a.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'wins_bedwars'
                   ] ?? 0) /
-                    (a.hypixelPlayer?.stats.Bedwars[
+                    (a.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'losses_bedwars'
                     ] || 1)
                 )
               } else if (this.$store.state.config.sortBy === 'FINALS') {
                 return (
-                  (b.hypixelPlayer?.stats.Bedwars[
+                  (b.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] +
                       'final_kills_bedwars'
                   ] ?? 0) -
-                  (a.hypixelPlayer?.stats.Bedwars[
+                  (a.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] +
                       'final_kills_bedwars'
                   ] ?? 0)
                 )
               } else if (this.$store.state.config.sortBy === 'WINS') {
                 return (
-                  (b.hypixelPlayer?.stats.Bedwars[
+                  (b.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'wins_bedwars'
                   ] ?? 0) -
-                  (a.hypixelPlayer?.stats.Bedwars[
+                  (a.hypixelPlayer?.stats?.Bedwars?.[
                     this.$store.getters['config/modePrefix'] + 'wins_bedwars'
                   ] ?? 0)
                 )
               } else {
                 return (
-                  b.hypixelBedwarsLevelInfo.level *
-                    ((b.hypixelPlayer.stats.Bedwars[
+                  (b.hypixelBedwarsLevelInfo?.level || 0) *
+                    ((b.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'final_kills_bedwars'
                     ] ?? 0) /
-                      (b.hypixelPlayer.stats.Bedwars[
+                      (b.hypixelPlayer?.stats?.Bedwars?.[
                         this.$store.getters['config/modePrefix'] +
                           'final_deaths_bedwars'
                       ] || 1)) **
                       2 -
-                  a.hypixelBedwarsLevelInfo.level *
-                    ((a.hypixelPlayer.stats.Bedwars[
+                  (a.hypixelBedwarsLevelInfo?.level || 0) *
+                    ((a.hypixelPlayer?.stats?.Bedwars?.[
                       this.$store.getters['config/modePrefix'] +
                         'final_kills_bedwars'
                     ] ?? 0) /
-                      (a.hypixelPlayer.stats.Bedwars[
+                      (a.hypixelPlayer?.stats?.Bedwars?.[
                         this.$store.getters['config/modePrefix'] +
                           'final_deaths_bedwars'
                       ] || 1)) **

@@ -338,16 +338,14 @@ export default new Vuex.Store({
             `,
           })
 
-          if (user.data !== null) {
-            if (user.data.session !== null) {
-              const minecraftProfile = await window.ipcRenderer.invoke(
-                'axios',
-                `https://sessionserver.mojang.com/session/minecraft/profile/${user.data.session.user.minecraftId}`
-              )
-              commit('setName', minecraftProfile.data?.name || null)
-            } else {
-              commit('setName', null)
-            }
+          if (user.data?.session) {
+            const minecraftProfile = await window.ipcRenderer.invoke(
+              'axios',
+              `https://sessionserver.mojang.com/session/minecraft/profile/${user.data.session.user.minecraftId}`
+            )
+            commit('setName', minecraftProfile.data?.name || null)
+          } else {
+            commit('setName', null)
           }
         },
       },
