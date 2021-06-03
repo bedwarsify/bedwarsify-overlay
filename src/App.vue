@@ -15,7 +15,7 @@
   >
     <title-bar />
 
-    <router-view class="overflow-auto" />
+    <router-view class="overflow-auto flex-grow" />
   </div>
 </template>
 <script lang="ts">

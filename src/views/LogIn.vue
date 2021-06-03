@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 flex justify-center items-center flex-grow">
+  <div class="p-2 flex justify-center items-center">
     <div v-if="status === 'IN_PROGRESS'">Logging In...</div>
 
     <div

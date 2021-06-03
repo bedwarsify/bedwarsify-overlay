@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 flex-grow">
+  <div class="p-2">
     <div class="flex justify-between mb-4">
       <div class="font-bold">Settings</div>
 

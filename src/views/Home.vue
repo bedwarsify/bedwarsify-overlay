@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full">
+  <div>
     <div class="w-full h-full">
       <div v-if="$store.state.temp.apiKeyValid" class="w-full h-full flex">
         <app-main />
