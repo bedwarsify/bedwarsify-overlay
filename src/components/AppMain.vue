@@ -205,12 +205,10 @@
                         <span
                           v-if="data.userByMinecraftId.customTagText"
                           :style="
-                            ('color: #' +
-                              data.userByMinecraftId.customTagColor &&
-                              data.userByMinecraftId.customTagColor.toString(
-                                16
-                              )) ||
-                            'ffffff'
+                            'color: #' +
+                            (data.userByMinecraftId.customTagColor || 0xffffff)
+                              .toString(16)
+                              .padStart(6, '0')
                           "
                         >
                           [{{ data.userByMinecraftId.customTagText }}]
