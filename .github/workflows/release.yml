@@ -34,3 +34,8 @@ jobs:
         run: npm run build -- -p always
         env:
           GH_TOKEN: ${{ secrets.RELEASES_GITHUB_TOKEN }}
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist

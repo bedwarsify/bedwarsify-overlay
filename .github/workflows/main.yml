@@ -18,6 +18,11 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build -- -p never
+      - name: Archive dist
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
   lint:
     name: Lint
     runs-on: ubuntu-latest
