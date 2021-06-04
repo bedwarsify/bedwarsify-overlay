@@ -35,7 +35,6 @@ export default new Vuex.Store({
         showDreamModes: false,
         showGuildTag: false,
         unnickYourself: true,
-        autoDetectOwnNickOnJoin: false,
         autoReportSnipers: true,
         logFileFormat: 'STANDARD' as 'STANDARD' | 'LUNAR_CLIENT' | 'LABYMOD',
         logFilePathPreset: 'STANDARD' as

@@ -402,21 +402,6 @@
           </div>
 
           <div class="flex items-center">
-            <div class="mr-2">Auto Detect Own Nick on Join:</div>
-
-            <input
-              type="checkbox"
-              :checked="$store.state.config.autoDetectOwnNickOnJoin"
-              @change="
-                $store.commit('config/set', [
-                  'autoDetectOwnNickOnJoin',
-                  !$store.state.config.autoDetectOwnNickOnJoin,
-                ])
-              "
-            />
-          </div>
-
-          <div class="flex items-center">
             <div class="mr-2">Auto Report Snipers:</div>
 
             <input

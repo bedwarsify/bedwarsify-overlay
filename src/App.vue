@@ -117,33 +117,19 @@ export default Vue.extend({
 
         if (joinMatch !== null) {
           if (this.$store.state.temp.lastMessageServerChange) {
-            if (
-              this.$store.state.config.autoDetectOwnNickOnJoin &&
-              this.$store.state.temp.name !== joinMatch[1] &&
-              this.$store.state.temp.nick !== joinMatch[1]
-            ) {
-              this.$store.commit('temp/setNick', joinMatch[1])
-              this.$store.commit('temp/setLastMessageServerChange', false)
+            this.$store.commit('temp/setLastMessageServerChange', false)
 
+            if (
+              this.$store.state.config.unnickYourself &&
+              this.$store.state.temp.nick === joinMatch[1] &&
+              this.$store.state.temp.name !== null
+            ) {
               await this.$store.dispatch(
                 'temp/addPlayerName',
                 this.$store.state.temp.name
               )
             } else {
-              this.$store.commit('temp/setLastMessageServerChange', false)
-
-              if (
-                this.$store.state.config.unnickYourself &&
-                this.$store.state.temp.nick === joinMatch[1] &&
-                this.$store.state.temp.name !== null
-              ) {
-                await this.$store.dispatch(
-                  'temp/addPlayerName',
-                  this.$store.state.temp.name
-                )
-              } else {
-                await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
-              }
+              await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
             }
           } else {
             this.$store.commit('temp/setLastMessageServerChange', false)
