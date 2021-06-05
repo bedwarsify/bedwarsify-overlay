@@ -2,28 +2,13 @@
 const colors = require('tailwindcss/colors')
 
 module.exports = {
+  mode: 'jit',
   purge: {
-    content: ['./public/**/*.html', './src/**/*.vue'],
-    options: {
-      safelist: [
-        'text-minecraft-dark-red',
-        'text-minecraft-red',
-        'text-minecraft-gold',
-        'text-minecraft-yellow',
-        'text-minecraft-dark-green',
-        'text-minecraft-green',
-        'text-minecraft-aqua',
-        'text-minecraft-dark-aqua',
-        'text-minecraft-dark-blue',
-        'text-minecraft-blue',
-        'text-minecraft-light-purple',
-        'text-minecraft-dark-purple',
-        'text-minecraft-white',
-        'text-minecraft-gray',
-        'text-minecraft-dark-gray',
-        'text-minecraft-black',
-      ],
-    },
+    content: [
+      './public/**/*.html',
+      './src/**/*.vue',
+      './src/assets/tailwind/safelist.txt',
+    ],
   },
   darkMode: false,
   theme: {
