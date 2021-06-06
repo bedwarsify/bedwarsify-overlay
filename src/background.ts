@@ -1,4 +1,12 @@
-import { app, protocol, BrowserWindow, ipcMain, shell, dialog } from 'electron'
+import {
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain,
+  shell,
+  dialog,
+  clipboard,
+} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
@@ -285,4 +293,27 @@ ipcMain.on('logFileSet', async (event, path: string) => {
       win?.webContents.send('logFileLine', line)
     })
   }
+})
+
+ipcMain.handle('captureScreenshotToClipboard', async () => {
+  const { width, height } = win?.getBounds() ?? {
+    width: 800,
+    height: 600,
+  }
+
+  win?.setBounds({
+    width: 720,
+    height: 440,
+  })
+
+  const image = await win?.webContents.capturePage()
+
+  if (image) {
+    clipboard.writeImage(image)
+  }
+
+  win?.setBounds({
+    width,
+    height,
+  })
 })

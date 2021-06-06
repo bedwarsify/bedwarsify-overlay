@@ -9,7 +9,7 @@
         <div class="font-semibold">Bedwarsify Overlay</div>
       </div>
 
-      <div>
+      <div v-if="!$store.state.temp.capturingScreenshot">
         <button class="no-drag p-2 hover:bg-gray-700" @click="minimize()">
           <svg
             xmlns="http://www.w3.org/2000/svg"

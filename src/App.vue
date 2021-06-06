@@ -10,7 +10,9 @@
       p-px
     "
     :style="{
-      '--tw-bg-opacity': $store.state.config.opacity,
+      '--tw-bg-opacity': $store.state.temp.capturingScreenshot
+        ? 1
+        : $store.state.config.opacity,
     }"
   >
     <title-bar />
@@ -22,8 +24,14 @@
 import TitleBar from '@/components/TitleBar.vue'
 import Vue from 'vue'
 import gql from 'graphql-tag'
+import { record } from '@/db'
 
 export default Vue.extend({
+  data() {
+    return {
+      recordIntervalsIds: [] as number[],
+    }
+  },
   components: { TitleBar },
   methods: {
     async updateApiKeyValid() {
@@ -60,7 +68,49 @@ export default Vue.extend({
       }
     },
   },
+  watch: {
+    async '$store.state.config.apiKey'() {
+      await this.updateApiKeyValid()
+    },
+    async '$store.state.config.logFilePath'() {
+      await window.ipcRenderer.send('logFileSet', null)
+      await this.updateLogFilePathReadable()
+    },
+    async '$store.state.tracking.players'() {
+      for (const intervalId of this.recordIntervalsIds) {
+        window.clearInterval(intervalId)
+      }
+
+      this.recordIntervalsIds = []
+
+      for (const player of this.$store.state.tracking.players) {
+        record(player.id)
+
+        if (player.autoRecord.interval) {
+          this.recordIntervalsIds.push(
+            window.setInterval(() => {
+              record(player.id)
+            }, player.autoRecord.interval)
+          )
+        }
+      }
+    },
+  },
   async mounted() {
+    for (const player of this.$store.state.tracking.players) {
+      if (player.autoRecord.onLaunch) {
+        record(player.id)
+      }
+
+      if (player.autoRecord.interval !== null) {
+        this.recordIntervalsIds.push(
+          window.setInterval(() => {
+            record(player.id)
+          }, player.autoRecord.interval)
+        )
+      }
+    }
+
     if (this.$store.state.config.logFilePath === '') {
       await this.$store.dispatch('config/setLogFilePathFromPreset', 'STANDARD')
     }
@@ -99,6 +149,16 @@ export default Vue.extend({
 
       const match = line.match(chatRegExp)
       const message = match !== null ? match[1] : line
+
+      if (message === '§r                           §bBed Wars Experience§b') {
+        for (const player of this.$store.state.tracking.players) {
+          if (player.autoRecord.afterGameEnd) {
+            record(player.id)
+          }
+        }
+
+        return
+      }
 
       if (/^\s+$/.test(message)) {
         if (this.$store.state.config.autoRemoveAllOnServerChange) {
@@ -425,15 +485,6 @@ export default Vue.extend({
         return
       }
     })
-  },
-  watch: {
-    async '$store.state.config.apiKey'() {
-      await this.updateApiKeyValid()
-    },
-    async '$store.state.config.logFilePath'() {
-      await window.ipcRenderer.send('logFileSet', null)
-      await this.updateLogFilePathReadable()
-    },
   },
 })
 </script>

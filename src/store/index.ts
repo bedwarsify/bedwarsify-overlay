@@ -7,6 +7,16 @@ import gql from 'graphql-tag'
 
 Vue.use(Vuex)
 
+export interface TrackingPlayer {
+  id: string
+  name: string
+  autoRecord: {
+    onLaunch: boolean
+    afterGameEnd: boolean
+    interval: number | null
+  }
+}
+
 export default new Vuex.Store({
   modules: {
     config: {
@@ -149,6 +159,44 @@ export default new Vuex.Store({
       },
       namespaced: true,
     },
+    tracking: {
+      state: () => ({
+        players: [] as TrackingPlayer[],
+      }),
+      mutations: {
+        addPlayer(state, [id, name]: string[]) {
+          if (state.players.find((player: TrackingPlayer) => player.id === id))
+            return
+
+          state.players = [
+            ...state.players,
+            {
+              id,
+              name,
+              autoRecord: {
+                onLaunch: true,
+                afterGameEnd: false,
+                interval: 30 * 60 * 1000,
+              },
+            },
+          ]
+        },
+        removePlayer(state, id: string) {
+          state.players = state.players.filter(
+            (player: TrackingPlayer) => player.id !== id
+          )
+        },
+        updatePlayer(state, [id, player]: [string, TrackingPlayer]) {
+          state.players = [
+            ...state.players.filter(
+              (player: TrackingPlayer) => player.id !== id
+            ),
+            player,
+          ]
+        },
+      },
+      namespaced: true,
+    },
     temp: {
       state: () => ({
         apiKeyValid: null as boolean | null,
@@ -165,6 +213,7 @@ export default new Vuex.Store({
         name: null as string | null,
         nick: null as string | null,
         lastMessageServerChange: false,
+        capturingScreenshot: false,
       }),
       mutations: {
         setApiKeyValid(state, newValue) {
@@ -198,6 +247,9 @@ export default new Vuex.Store({
         },
         setLastMessageServerChange(state, newValue) {
           state.lastMessageServerChange = newValue
+        },
+        setCapturingScreenshot(state, newValue: boolean) {
+          state.capturingScreenshot = newValue
         },
       },
       actions: {
@@ -355,6 +407,10 @@ export default new Vuex.Store({
     createPersistedState({
       key: 'config',
       paths: ['config'],
+    }),
+    createPersistedState({
+      key: 'tracking',
+      paths: ['tracking'],
     }),
   ],
 })

@@ -73,6 +73,10 @@
           Clear Players
         </button>
 
+        <router-link to="/tracking" class="hover:text-gray-200">
+          Tracking
+        </router-link>
+
         <router-link to="/settings" class="hover:text-gray-200">
           Settings
         </router-link>

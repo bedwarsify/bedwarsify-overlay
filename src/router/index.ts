@@ -3,6 +3,9 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
 import Settings from '../views/Settings.vue'
 import LogIn from '../views/LogIn.vue'
+import Tracking from '../views/Tracking.vue'
+import TrackingPlayer from '../views/TrackingPlayer.vue'
+import TrackingPlayerSettings from '../views/TrackingPlayerSettings.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +24,21 @@ const routes: Array<RouteConfig> = [
     path: '/log-in',
     name: 'LogIn',
     component: LogIn,
+  },
+  {
+    path: '/tracking',
+    name: 'Tracking',
+    component: Tracking,
+  },
+  {
+    path: '/tracking/:playerId',
+    name: 'TrackingPlayer',
+    component: TrackingPlayer,
+  },
+  {
+    path: '/tracking/:playerId/settings',
+    name: 'TrackingPlayerSettings',
+    component: TrackingPlayerSettings,
   },
 ]
 
