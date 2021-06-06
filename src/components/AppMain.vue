@@ -510,13 +510,10 @@
                           $store.getters['config/modePrefix'] +
                             'final_kills_bedwars'
                         ] /
-                        Math.max(
-                          player.hypixelPlayer.stats.Bedwars[
-                            $store.getters['config/modePrefix'] +
-                              'final_deaths_bedwars'
-                          ],
-                          1
-                        ),
+                        (player.hypixelPlayer.stats.Bedwars[
+                          $store.getters['config/modePrefix'] +
+                            'final_deaths_bedwars'
+                        ] || 1),
                       colorSteps: [0, 2, 4, 6, 10, 15, 25, 50],
                     },
                     {
@@ -524,13 +521,9 @@
                         player.hypixelPlayer.stats.Bedwars[
                           $store.getters['config/modePrefix'] + 'wins_bedwars'
                         ] /
-                        Math.max(
-                          player.hypixelPlayer.stats.Bedwars[
-                            $store.getters['config/modePrefix'] +
-                              'losses_bedwars'
-                          ],
-                          1
-                        ),
+                        (player.hypixelPlayer.stats.Bedwars[
+                          $store.getters['config/modePrefix'] + 'losses_bedwars'
+                        ] || 1),
                       colorSteps: [0, 1, 2, 3, 5, 7, 12, 25],
                     },
                     {
@@ -559,13 +552,10 @@
                           $store.getters['config/modePrefix'] +
                             'final_kills_bedwars'
                         ] /
-                          Math.max(
-                            player.hypixelPlayer.stats.Bedwars[
-                              $store.getters['config/modePrefix'] +
-                                'final_deaths_bedwars'
-                            ],
-                            1
-                          )) **
+                          (player.hypixelPlayer.stats.Bedwars[
+                            $store.getters['config/modePrefix'] +
+                              'final_deaths_bedwars'
+                          ] || 1)) **
                           2,
                       colorSteps: [
                         0, 1000, 2500, 4000, 10000, 100000, 250000, 1000000,
