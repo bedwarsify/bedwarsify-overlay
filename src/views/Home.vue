@@ -13,32 +13,81 @@
           flex flex-col
           justify-center
           items-center
-          space-y-3
+          space-y-6
         "
       >
-        <div class="font-semibold text-red-600 text-xl">
-          <template v-if="$store.state.config.apiKey !== ''">
-            Invalid API Key!
-          </template>
+        <div class="space-y-2 flex flex-col items-center">
+          <div class="font-semibold text-red-600 text-xl">
+            <template v-if="$store.state.config.apiKey !== ''">
+              Invalid API Key!
+            </template>
 
-          <template v-else>No API Key Set!</template>
+            <template v-else>No API Key Set!</template>
+          </div>
+
+          <div
+            v-if="
+              $store.state.config.setApiKeyFromCmd &&
+              $store.state.temp.logFilePathReadable
+            "
+            class="text-lg"
+          >
+            Type /api new
+          </div>
         </div>
 
-        <div v-if="$store.state.config.setApiKeyFromCmd" class="text-lg">
-          Use /api new
+        <div
+          v-if="!$store.state.temp.logFilePathReadable"
+          class="text-red-600 font-semibold"
+        >
+          Log file path invalid!
         </div>
 
-        <router-link to="/settings" class="hover:text-gray-200">
-          Go To Settings
-        </router-link>
+        <div class="flex flex-col space-y-2 items-center">
+          <router-link to="/settings" class="hover:text-gray-200">
+            Go To Settings
+          </router-link>
+
+          <button
+            @click="
+              openExternal(
+                'https://docs.bedwarsify.com/overlay/getting-started'
+              )
+            "
+            class="hover:text-gray-200 flex space-x-1 items-center"
+          >
+            <span>Getting Started Guide</span>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
-<script>
-import AppMain from '@/components/AppMain'
+
+<script lang="ts">
+import AppMain from '@/components/AppMain.vue'
 
 export default {
   components: { AppMain },
+  methods: {
+    openExternal(url: string) {
+      window.ipcRenderer.send('openExternal', url)
+    },
+  },
 }
 </script>
