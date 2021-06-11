@@ -446,6 +446,32 @@ export default Vue.extend({
 
         return
       }
+
+      const chatCommandMatch = message.match(
+        /^Can't find a player by the name of '(.+)'$/
+      )
+
+      if (chatCommandMatch !== null) {
+        const command = chatCommandMatch[1]
+
+        if (command === '-') {
+          this.$store.commit('temp/clearPlayers')
+
+          return
+        }
+
+        const addPlayerMatch = chatCommandMatch[1].match(
+          /\+([A-Za-z0-9_]{3,16})/
+        )
+
+        if (addPlayerMatch !== null) {
+          this.$store.dispatch('temp/addPlayerName', addPlayerMatch[1])
+
+          return
+        }
+
+        return
+      }
     })
   },
 })
