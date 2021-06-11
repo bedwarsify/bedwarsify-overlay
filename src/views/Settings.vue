@@ -195,21 +195,6 @@
               "
             />
           </div>
-
-          <div class="flex items-center">
-            <div class="mr-2">Unnick Yourself:</div>
-
-            <input
-              type="checkbox"
-              :checked="$store.state.config.unnickYourself"
-              @change="
-                $store.commit('config/set', [
-                  'unnickYourself',
-                  !$store.state.config.unnickYourself,
-                ])
-              "
-            />
-          </div>
         </div>
       </div>
 

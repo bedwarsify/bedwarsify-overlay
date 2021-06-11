@@ -25,6 +25,7 @@ import TitleBar from '@/components/TitleBar.vue'
 import Vue from 'vue'
 import gql from 'graphql-tag'
 import { record } from '@/db'
+import uuid from 'uuid'
 
 export default Vue.extend({
   data() {
@@ -176,57 +177,17 @@ export default Vue.extend({
         )
 
         if (joinMatch !== null) {
-          if (this.$store.state.temp.lastMessageServerChange) {
-            this.$store.commit('temp/setLastMessageServerChange', false)
-
-            if (
-              this.$store.state.config.unnickYourself &&
-              this.$store.state.temp.nick === joinMatch[1] &&
-              this.$store.state.temp.name !== null
-            ) {
-              await this.$store.dispatch(
-                'temp/addPlayerName',
-                this.$store.state.temp.name
-              )
-            } else {
-              await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
-            }
-          } else {
-            this.$store.commit('temp/setLastMessageServerChange', false)
-
-            if (
-              this.$store.state.config.unnickYourself &&
-              this.$store.state.temp.nick === joinMatch[1] &&
-              this.$store.state.temp.name !== null
-            ) {
-              await this.$store.dispatch(
-                'temp/addPlayerName',
-                this.$store.state.temp.name
-              )
-            } else {
-              await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
-            }
-          }
+          await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
 
           return
         }
-
-        this.$store.commit('temp/setLastMessageServerChange', false)
 
         const onlineMatch = message.match(
           /^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{3,16}(?:, )?)+)$/
         )
 
         if (onlineMatch !== null) {
-          const playerNames = onlineMatch[1]
-            .split(', ')
-            .map((name) =>
-              this.$store.state.config.unnickYourself &&
-              this.$store.state.temp.nick === name &&
-              this.$store.state.temp.name !== null
-                ? this.$store.state.temp.name
-                : name
-            )
+          const playerNames = onlineMatch[1].split(', ')
 
           if (this.$store.state.config.autoRemoveAllOnWho) {
             this.$store.commit('temp/clearPlayers')
@@ -246,12 +207,9 @@ export default Vue.extend({
         if (quitMatch !== null) {
           await this.$store.commit('temp/removePlayerByName', quitMatch[1])
 
-          this.$store.commit('temp/setLastMessageServerChange', false)
           return
         }
       }
-
-      this.$store.commit('temp/setLastMessageServerChange', false)
 
       if (this.$store.state.config.setApiKeyFromCmd) {
         const keyMatch = message.match(
@@ -479,8 +437,12 @@ export default Vue.extend({
         /^You are now nicked as ([A-Za-z0-9_]{3,16})!$/
       )
 
-      if (nickedMatch !== null) {
-        this.$store.commit('temp/setNick', nickedMatch[1])
+      if (nickedMatch !== null && this.$store.state.temp.name) {
+        this.$store.commit('nicks/addNick', [
+          uuid.v4(),
+          nickedMatch[1],
+          this.$store.state.temp.name,
+        ])
 
         return
       }

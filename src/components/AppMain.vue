@@ -11,10 +11,6 @@
       </div>
 
       <div class="flex space-x-4">
-        <div v-if="$store.state.temp.nick !== null">
-          Nick: {{ $store.state.temp.nick }}
-        </div>
-
         <div class="flex space-x-2 items-center">
           <div>Mode:</div>
 
@@ -72,6 +68,10 @@
         >
           Clear Players
         </button>
+
+        <router-link to="/nicks" class="hover:text-gray-200">
+          Nicks
+        </router-link>
 
         <router-link to="/tracking" class="hover:text-gray-200">
           Tracking

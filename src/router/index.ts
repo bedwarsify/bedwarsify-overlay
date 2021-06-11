@@ -6,6 +6,7 @@ import LogIn from '../views/LogIn.vue'
 import Tracking from '../views/Tracking.vue'
 import TrackingPlayer from '../views/TrackingPlayer.vue'
 import TrackingPlayerSettings from '../views/TrackingPlayerSettings.vue'
+import Nicks from '../views/Nicks.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes: Array<RouteConfig> = [
     path: '/tracking/:playerId/settings',
     name: 'TrackingPlayerSettings',
     component: TrackingPlayerSettings,
+  },
+  {
+    path: '/nicks',
+    name: 'Nicks',
+    component: Nicks,
   },
 ]
 

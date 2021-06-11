@@ -17,6 +17,12 @@ export interface TrackingPlayer {
   }
 }
 
+export interface Nick {
+  id: string
+  nick: string
+  name: string
+}
+
 export default new Vuex.Store({
   modules: {
     config: {
@@ -44,7 +50,6 @@ export default new Vuex.Store({
           | 'FOUR_FOUR_LUCKY',
         showDreamModes: false,
         showGuildTag: false,
-        unnickYourself: true,
         autoReportSnipers: true,
         logFileFormat: 'STANDARD' as 'STANDARD' | 'LUNAR_CLIENT' | 'LABYMOD',
         logFilePathPreset: 'STANDARD' as
@@ -197,6 +202,31 @@ export default new Vuex.Store({
       },
       namespaced: true,
     },
+    nicks: {
+      state: () => ({
+        nicks: [] as Nick[],
+      }),
+      mutations: {
+        addNick(state, [id, nick, name]: [string, string, string]) {
+          if (state.nicks.find((nick: Nick) => nick.id === id)) return
+
+          state.nicks = [
+            ...state.nicks.filter(
+              (nickIt: Nick) => nickIt.nick.toLowerCase() !== nick
+            ),
+            {
+              id,
+              nick,
+              name,
+            },
+          ]
+        },
+        removeNick(state, id: string) {
+          state.nicks = state.nicks.filter((nick: Nick) => nick.id !== id)
+        },
+      },
+      namespaced: true,
+    },
     temp: {
       state: () => ({
         apiKeyValid: null as boolean | null,
@@ -211,7 +241,6 @@ export default new Vuex.Store({
         }[],
         logFilePathReadable: null as boolean | null,
         name: null as string | null,
-        nick: null as string | null,
         lastMessageServerChange: false,
         capturingScreenshot: false,
       }),
@@ -242,12 +271,6 @@ export default new Vuex.Store({
         setName(state, newValue) {
           state.name = newValue
         },
-        setNick(state, newValue) {
-          state.nick = newValue
-        },
-        setLastMessageServerChange(state, newValue) {
-          state.lastMessageServerChange = newValue
-        },
         setCapturingScreenshot(state, newValue: boolean) {
           state.capturingScreenshot = newValue
         },
@@ -260,6 +283,16 @@ export default new Vuex.Store({
             )
           )
             return
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const nick: Nick | undefined = rootState.nicks.nicks.find(
+            (nick: Nick) => nick.nick.toLowerCase() === name.toLowerCase()
+          )
+
+          if (nick) {
+            name = nick.name
+          }
 
           commit('addPlayer', {
             name,
@@ -411,6 +444,10 @@ export default new Vuex.Store({
     createPersistedState({
       key: 'tracking',
       paths: ['tracking'],
+    }),
+    createPersistedState({
+      key: 'nicks',
+      paths: ['nicks'],
     }),
   ],
 })
