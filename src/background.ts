@@ -6,6 +6,7 @@ import {
   shell,
   dialog,
   clipboard,
+  globalShortcut,
 } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
@@ -109,6 +110,22 @@ app.on('ready', async () => {
   }
 
   await createWindow()
+})
+
+function toggleWinMinimized() {
+  if (win?.isMinimized()) {
+    win?.showInactive()
+  } else {
+    win?.minimize()
+  }
+}
+
+app.whenReady().then(() => {
+  globalShortcut.register('CmdOrCtrl+/', toggleWinMinimized)
+})
+
+app.on('will-quit', () => {
+  globalShortcut.unregister('CmdOrCtrl+/')
 })
 
 if (isDevelopment) {
