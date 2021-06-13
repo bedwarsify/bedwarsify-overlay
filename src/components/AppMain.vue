@@ -1,10 +1,10 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <div class="flex justify-between mb-4 p-2">
-      <div>
+    <div class="flex justify-between mb-4 p-2 space-x-6">
+      <div class="flex-grow min-w-[2rem] max-w-[16rem]">
         <input
           type="text"
-          class="bg-transparent border-b"
+          class="bg-transparent border-b w-full"
           v-model.trim="manualAddPlayerName"
           @keypress.enter="manualAddPlayer()"
         />
