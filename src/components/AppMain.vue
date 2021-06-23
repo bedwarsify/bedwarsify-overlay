@@ -235,6 +235,13 @@
                         </span>
 
                         <span
+                          v-else-if="data.userByMinecraftId.role === 'HELPER'"
+                          class="text-cyan-400"
+                        >
+                          [HLP]
+                        </span>
+
+                        <span
                           v-else-if="data.userByMinecraftId.role === 'PARTNER'"
                           class="text-green-500"
                         >
