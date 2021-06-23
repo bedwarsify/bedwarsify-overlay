@@ -75,10 +75,13 @@ async function createWindow() {
   } else {
     createProtocol('app')
     await win.loadURL('app://./index.html')
-    await autoUpdater.checkForUpdatesAndNotify({
-      title: 'A new update is available to install',
-      body: 'Bedwarsify Overlay v{version} has been downloaded and will be installed on exit.',
-    })
+
+    if (!process.windowsStore && !process.mas) {
+      await autoUpdater.checkForUpdatesAndNotify({
+        title: 'A new update is available to install',
+        body: 'Bedwarsify Overlay v{version} has been downloaded and will be installed on exit.',
+      })
+    }
   }
 }
 
