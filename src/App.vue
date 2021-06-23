@@ -136,11 +136,11 @@ export default Vue.extend({
 
       const chatRegExp = {
         STANDARD:
-          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[Client thread\/INFO\]: \[CHAT\] (.+)$/,
+          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[(?:(?:Client thread)|(?:main))\/INFO\]: \[CHAT\] (.+)$/,
         LUNAR_CLIENT:
-          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[Client thread\/INFO\]: \[CHAT\] (.+)$/,
+          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[(?:(?:Client thread)|(?:main))\/INFO\]: \[CHAT\] (.+)$/,
         LABYMOD:
-          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[Client thread\/INFO] \[net\.labymod\.core_implementation\.mc18\.gui\.GuiChatAdapter\/]: \[CHAT] (.+)$/,
+          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[(?:(?:Client thread)|(?:main))\/INFO] \[net\.labymod\.core_implementation\.mc18\.gui\.GuiChatAdapter\/]: \[CHAT] (.+)$/,
       }[
         this.$store.state.config.logFileFormat as
           | 'STANDARD'
