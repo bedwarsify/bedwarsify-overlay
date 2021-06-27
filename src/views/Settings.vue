@@ -25,7 +25,7 @@
         </button>
 
         <button
-          @click="openExternal('https://discord.gg/EMgB7nrNJm')"
+          @click="openExternal('https://discord.gg/XyEv5JQ53S')"
           class="hover:text-gray-200"
         >
           (Discord)

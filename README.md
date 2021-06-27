@@ -8,7 +8,7 @@ A simple but feature-rich Hypixel Bed Wars anti-sniping overlay.
 
 - [Website (Download)](https://bedwarsify.com)
 - [Docs](https://docs.bedwarsify.com/overlay)
-- [Discord](https://discord.gg/EMgB7nrNJm)
+- [Discord](https://discord.gg/XyEv5JQ53S)
 
 ## Environment Variables
 
