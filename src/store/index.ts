@@ -78,6 +78,7 @@ export default new Vuex.Store({
           | 'WINS',
         sortAscending: false,
         customFontFamily: 'system-ui',
+        customFontSize: '16px',
       }),
       getters: {
         modePrefix: (state) =>

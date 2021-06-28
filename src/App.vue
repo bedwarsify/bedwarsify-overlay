@@ -70,6 +70,10 @@ export default Vue.extend({
         this.$store.commit('temp/setLogFilePathReadable', false)
       }
     },
+    updateRootFontSize() {
+      document.documentElement.style.fontSize =
+        this.$store.state.config.customFontSize
+    },
   },
   watch: {
     async '$store.state.config.apiKey'() {
@@ -98,8 +102,13 @@ export default Vue.extend({
         }
       }
     },
+    '$store.state.config.customFontSize'() {
+      this.updateRootFontSize()
+    },
   },
   async mounted() {
+    this.updateRootFontSize()
+
     for (const player of this.$store.state.tracking.players) {
       if (player.autoRecord.onLaunch) {
         record(player.id)

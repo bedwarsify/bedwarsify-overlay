@@ -457,6 +457,29 @@
               Reset
             </button>
           </div>
+
+          <div class="flex">
+            <div class="mr-2">Custom Font Size:</div>
+
+            <input
+              class="bg-transparent border-b flex-grow max-w-[8rem]"
+              :value="$store.state.config.customFontSize"
+              @change="
+                $store.commit('config/set', [
+                  'customFontSize',
+                  $event.target.value,
+                ])
+              "
+            />
+
+            <button
+              v-if="$store.state.config.customFontSize !== '16px'"
+              @click="$store.commit('config/set', ['customFontSize', '16px'])"
+              class="ml-2"
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </div>
     </div>
