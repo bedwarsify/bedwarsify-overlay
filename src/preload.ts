@@ -17,7 +17,12 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   on: (channel: string, func: any) => {
-    const validChannels = ['discordAuthCode', 'discordAuthEnd', 'logFileLine']
+    const validChannels = [
+      'discordAuthCode',
+      'discordAuthEnd',
+      'logFileLine',
+      'globalShortcutPressed',
+    ]
 
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, func)
@@ -42,6 +47,10 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     } else if (channel === 'fileReadable') {
       return ipcRenderer.invoke(channel, ...args)
     } else if (channel === 'captureScreenshotToClipboard') {
+      return ipcRenderer.invoke(channel)
+    } else if (channel === 'registerGlobalShortcuts') {
+      return ipcRenderer.invoke(channel, ...args)
+    } else if (channel === 'toggleWinMinimized') {
       return ipcRenderer.invoke(channel)
     }
   },

@@ -368,6 +368,45 @@
       </div>
 
       <div>
+        <div class="font-semibold mb-3">
+          Keyboard Shortcuts
+
+          <span class="text-red-300">[Beta]</span>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center">
+            <div class="mr-2">Minimize/Unminimize:</div>
+
+            <input
+              @click="
+                $store.commit('config/set', [
+                  'keyboardShortcutMinimizeUnminize',
+                  '',
+                ])
+              "
+              @keydown="
+                !$event.repeat &&
+                  $store.commit('config/set', [
+                    'keyboardShortcutMinimizeUnminize',
+                    $store.state.config.keyboardShortcutMinimizeUnminize +
+                      ($store.state.config.keyboardShortcutMinimizeUnminize !==
+                      ''
+                        ? '+'
+                        : '') +
+                      $event.key,
+                  ])
+              "
+              @keyup="$event.target.blur()"
+              :value="$store.state.config.keyboardShortcutMinimizeUnminize"
+              class="bg-transparent border-b flex-grow max-w-[12rem]"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
         <div class="font-semibold mb-3 flex items-center space-x-1">
           <span> Advanced </span>
 

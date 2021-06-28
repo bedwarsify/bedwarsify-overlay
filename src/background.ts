@@ -123,14 +123,6 @@ function toggleWinMinimized() {
   }
 }
 
-app.whenReady().then(() => {
-  globalShortcut.register('CmdOrCtrl+/', toggleWinMinimized)
-})
-
-app.on('will-quit', () => {
-  globalShortcut.unregister('CmdOrCtrl+/')
-})
-
 if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', (data) => {
@@ -151,6 +143,10 @@ ipcMain.on('winMinimize', () => {
 
 ipcMain.on('winClose', () => {
   win?.close()
+})
+
+ipcMain.handle('toggleWinMinimized', () => {
+  toggleWinMinimized()
 })
 
 ipcMain.on('discordAuthStart', async () => {
@@ -336,4 +332,31 @@ ipcMain.handle('captureScreenshotToClipboard', async () => {
     width,
     height,
   })
+})
+
+const registeredGlobalShortcuts = new Set<string>()
+
+ipcMain.handle('registerGlobalShortcuts', async (event, shortcuts) => {
+  for (const shortcut of registeredGlobalShortcuts) {
+    globalShortcut.unregister(shortcut)
+    registeredGlobalShortcuts.delete(shortcut)
+  }
+
+  for (const shortcut of shortcuts) {
+    try {
+      globalShortcut.register(shortcut, () =>
+        win?.webContents.send('globalShortcutPressed', shortcut)
+      )
+      registeredGlobalShortcuts.add(shortcut)
+
+      // eslint-disable-next-line no-empty
+    } catch (error) {}
+  }
+})
+
+app.on('will-quit', () => {
+  for (const shortcut of registeredGlobalShortcuts) {
+    globalShortcut.unregister(shortcut)
+    registeredGlobalShortcuts.delete(shortcut)
+  }
 })

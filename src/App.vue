@@ -74,6 +74,13 @@ export default Vue.extend({
       document.documentElement.style.fontSize =
         this.$store.state.config.customFontSize
     },
+    async registerGlobalShortcuts() {
+      const shortcuts = [
+        this.$store.state.config.keyboardShortcutMinimizeUnminize,
+      ].filter((shortcut) => shortcut !== '')
+
+      await window.ipcRenderer.invoke('registerGlobalShortcuts', shortcuts)
+    },
   },
   watch: {
     async '$store.state.config.apiKey'() {
@@ -105,9 +112,13 @@ export default Vue.extend({
     '$store.state.config.customFontSize'() {
       this.updateRootFontSize()
     },
+    async '$store.state.config.keyboardShortcutMinimizeUnminize'() {
+      await this.registerGlobalShortcuts()
+    },
   },
   async mounted() {
     this.updateRootFontSize()
+    this.registerGlobalShortcuts()
 
     for (const player of this.$store.state.tracking.players) {
       if (player.autoRecord.onLaunch) {
@@ -484,6 +495,17 @@ export default Vue.extend({
         return
       }
     })
+
+    window.ipcRenderer.on(
+      'globalShortcutPressed',
+      async (event, shortcut: string) => {
+        if (
+          shortcut === this.$store.state.config.keyboardShortcutMinimizeUnminize
+        ) {
+          await window.ipcRenderer.invoke('toggleWinMinimized')
+        }
+      }
+    )
   },
 })
 </script>
