@@ -21,6 +21,7 @@
     <router-view class="overflow-auto flex-grow" />
   </div>
 </template>
+
 <script lang="ts">
 import TitleBar from '@/components/TitleBar.vue'
 import Vue from 'vue'
