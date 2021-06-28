@@ -368,9 +368,41 @@
       </div>
 
       <div>
-        <div class="font-semibold mb-3">Advanced</div>
+        <div class="font-semibold mb-3 flex items-center space-x-1">
+          <span> Advanced </span>
 
-        <div class="space-y-2">
+          <button @click="advancedVisibled = !advancedVisibled">
+            <svg
+              v-if="advancedVisibled"
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <svg
+              v-else
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-2" v-if="advancedVisibled">
           <div class="flex items-center">
             <div class="mr-2">Set API Key From Cmd:</div>
 
@@ -411,6 +443,11 @@ import { onLogout } from '@/vue-apollo'
 import Vue from 'vue'
 
 export default Vue.extend({
+  data() {
+    return {
+      advancedVisibled: false,
+    }
+  },
   computed: {
     version() {
       return process.env.VUE_APP_VERSION
