@@ -78,6 +78,7 @@ export default new Vuex.Store({
           | 'WINS',
         sortAscending: false,
         keyboardShortcutMinimizeUnminize: '',
+        keyboardShortcutClearPlayers: '',
         customFontFamily: 'system-ui',
         customFontSize: '16px',
       }),

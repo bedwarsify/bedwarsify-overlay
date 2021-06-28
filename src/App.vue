@@ -77,6 +77,7 @@ export default Vue.extend({
     async registerGlobalShortcuts() {
       const shortcuts = [
         this.$store.state.config.keyboardShortcutMinimizeUnminize,
+        this.$store.state.config.keyboardShortcutClearPlayers,
       ].filter((shortcut) => shortcut !== '')
 
       await window.ipcRenderer.invoke('registerGlobalShortcuts', shortcuts)
@@ -113,6 +114,9 @@ export default Vue.extend({
       this.updateRootFontSize()
     },
     async '$store.state.config.keyboardShortcutMinimizeUnminize'() {
+      await this.registerGlobalShortcuts()
+    },
+    async '$store.state.config.keyboardShortcutClearPlayers'() {
       await this.registerGlobalShortcuts()
     },
   },
@@ -503,6 +507,10 @@ export default Vue.extend({
           shortcut === this.$store.state.config.keyboardShortcutMinimizeUnminize
         ) {
           await window.ipcRenderer.invoke('toggleWinMinimized')
+        } else if (
+          shortcut === this.$store.state.config.keyboardShortcutClearPlayers
+        ) {
+          this.$store.commit('temp/clearPlayers')
         }
       }
     )

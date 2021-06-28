@@ -403,6 +403,34 @@
               spellcheck="false"
             />
           </div>
+
+          <div class="flex items-center">
+            <div class="mr-2">Clear Players:</div>
+
+            <input
+              @click="
+                $store.commit('config/set', [
+                  'keyboardShortcutClearPlayers',
+                  '',
+                ])
+              "
+              @keydown="
+                !$event.repeat &&
+                  $store.commit('config/set', [
+                    'keyboardShortcutClearPlayers',
+                    $store.state.config.keyboardShortcutClearPlayers +
+                      ($store.state.config.keyboardShortcutClearPlayers !== ''
+                        ? '+'
+                        : '') +
+                      $event.key,
+                  ])
+              "
+              @keyup="$event.target.blur()"
+              :value="$store.state.config.keyboardShortcutClearPlayers"
+              class="bg-transparent border-b flex-grow max-w-[12rem]"
+              spellcheck="false"
+            />
+          </div>
         </div>
       </div>
 
