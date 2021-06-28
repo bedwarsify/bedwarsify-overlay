@@ -13,6 +13,7 @@
       '--tw-bg-opacity': $store.state.temp.capturingScreenshot
         ? 1
         : $store.state.config.opacity,
+      'font-family': $store.state.config.customFontFamily,
     }"
   >
     <title-bar />

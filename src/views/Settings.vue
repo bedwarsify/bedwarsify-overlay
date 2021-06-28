@@ -432,6 +432,31 @@
               "
             />
           </div>
+
+          <div class="flex">
+            <div class="mr-2">Custom Font Family:</div>
+
+            <input
+              class="bg-transparent border-b flex-grow max-w-[12rem]"
+              :value="$store.state.config.customFontFamily"
+              @change="
+                $store.commit('config/set', [
+                  'customFontFamily',
+                  $event.target.value,
+                ])
+              "
+            />
+
+            <button
+              v-if="$store.state.config.customFontFamily !== 'system-ui'"
+              @click="
+                $store.commit('config/set', ['customFontFamily', 'system-ui'])
+              "
+              class="ml-2"
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </div>
     </div>
