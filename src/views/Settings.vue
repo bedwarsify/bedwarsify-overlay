@@ -371,9 +371,9 @@
         <div class="font-semibold mb-3 flex items-center space-x-1">
           <span> Advanced </span>
 
-          <button @click="advancedVisibled = !advancedVisibled">
+          <button @click="advancedVisible = !advancedVisible">
             <svg
-              v-if="advancedVisibled"
+              v-if="advancedVisible"
               class="h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -402,7 +402,7 @@
           </button>
         </div>
 
-        <div class="space-y-2" v-if="advancedVisibled">
+        <div class="space-y-2" v-if="advancedVisible">
           <div class="flex items-center">
             <div class="mr-2">Set API Key From Cmd:</div>
 
@@ -493,7 +493,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data() {
     return {
-      advancedVisibled: false,
+      advancedVisible: false,
     }
   },
   computed: {
