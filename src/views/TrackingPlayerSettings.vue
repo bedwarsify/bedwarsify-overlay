@@ -6,7 +6,7 @@
 
         <div class="flex items-center space-x-2">
           <img
-            :src="`https://crafatar.com/avatars/${player.id}?size=16`"
+            :src="`https://crafatar.com/avatars/${player.id}?size=16&overlay`"
             alt=""
           />
 

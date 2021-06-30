@@ -61,7 +61,7 @@
 
                     <div>
                       <img
-                        :src="`https://crafatar.com/avatars/${data.session.user.minecraftId}?size=32`"
+                        :src="`https://crafatar.com/avatars/${data.session.user.minecraftId}?size=32&overlay`"
                         class="h-6"
                       />
                     </div>

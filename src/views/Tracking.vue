@@ -19,7 +19,7 @@
           class="flex-grow hover:text-gray-200 flex items-center space-x-5"
         >
           <img
-            :src="`https://crafatar.com/avatars/${player.id}?size=32`"
+            :src="`https://crafatar.com/avatars/${player.id}?size=32&overlay`"
             alt=""
           />
           <div class="flex-grow">{{ player.name }}</div>
