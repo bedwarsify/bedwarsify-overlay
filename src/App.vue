@@ -28,6 +28,7 @@ import Vue from 'vue'
 import gql from 'graphql-tag'
 import { record } from '@/db'
 import uuid from 'uuid'
+import { Player } from '@/store'
 
 export default Vue.extend({
   data() {
@@ -269,6 +270,21 @@ export default Vue.extend({
           this.$store.state.config.autoReportSnipers &&
           snipedRegexps.find((regexp) => regexp.test(shoutMessage))
         ) {
+          const reporteeMinecraftId =
+            this.$store.state.temp.players.find(
+              (player: any) => player.name === shoutMatch[1]
+            )?.id ??
+            (
+              await window.ipcRenderer
+                .invoke(
+                  'axios',
+                  `https://api.mojang.com/users/profiles/minecraft/${shoutMatch[1]}`,
+                  undefined,
+                  [200, 204, 404]
+                )
+                .catch(() => ({}))
+            )?.data?.id
+
           await this.$apollo
             .mutate({
               mutation: gql`
@@ -282,21 +298,21 @@ export default Vue.extend({
                 }
               `,
               variables: {
-                reporteeMinecraftId:
-                  this.$store.state.temp.players.find(
-                    (player: any) => player.name === shoutMatch[1]
-                  )?.id ??
-                  (
-                    await window.ipcRenderer
-                      .invoke(
-                        'axios',
-                        `https://api.mojang.com/users/profiles/minecraft/${shoutMatch[1]}`,
-                        undefined,
-                        [200, 204, 404]
-                      )
-                      .catch(() => ({}))
-                  )?.data?.id,
+                reporteeMinecraftId,
               },
+            })
+            .then((result) => {
+              const reporteePlayer = this.$store.state.temp.players.find(
+                (player: Player) => player.id === reporteeMinecraftId
+              )
+
+              this.$store.commit('temp/updatePlayerByName', [
+                reporteePlayer.name,
+                {
+                  ...reporteePlayer,
+                  user: result.data.createReport.reportee,
+                },
+              ])
             })
             .catch(() => ({}))
         }
