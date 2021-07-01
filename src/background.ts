@@ -16,6 +16,7 @@ import {
   Client as HypixelClient,
   Components,
   getBedwarsLevelInfo,
+  getNetworkLevel,
   getPlayerRank,
 } from '@zikeji/hypixel'
 import fs from 'fs'
@@ -53,8 +54,6 @@ async function createWindow() {
     frame: false,
     transparent: true,
     alwaysOnTop: true,
-    maximizable: false,
-    fullscreenable: false,
     hasShadow: process.platform !== 'darwin',
     webPreferences: {
       nodeIntegration: process.env
@@ -256,6 +255,10 @@ ipcMain.handle(
       const [player] = args as [Components.Schemas.Player]
 
       return getBedwarsLevelInfo(player)
+    } else if (resource === 'getNetworkLevel') {
+      const [player] = args as [Components.Schemas.Player]
+
+      return getNetworkLevel(player)
     }
   }
 )

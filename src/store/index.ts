@@ -2,10 +2,27 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import { AxiosResponse } from 'axios'
-import { BedwarsLevelInfo, Components, PlayerRank } from '@zikeji/hypixel'
+import {
+  BedwarsLevelInfo,
+  Components,
+  NetworkLevel,
+  PlayerRank,
+} from '@zikeji/hypixel'
 import gql from 'graphql-tag'
 
 Vue.use(Vuex)
+
+export interface Player {
+  name: string
+  id: string | null
+  nicked: boolean | null
+  hypixelPlayer: Components.Schemas.Player | null
+  hypixelPlayerRank: PlayerRank | null
+  hypixelBedwarsLevelInfo: BedwarsLevelInfo | null
+  hypixelGuild: Components.Schemas.Guild | null
+  hypixelNetworkLevel: NetworkLevel | null
+  user: User | null
+}
 
 export interface TrackingPlayer {
   id: string
@@ -23,7 +40,433 @@ export interface Nick {
   name: string
 }
 
-export default new Vuex.Store({
+export enum Column {
+  NAME = 'NAME',
+  LEVEL = 'LEVEL',
+  TAG = 'TAG',
+  NETWORK_LEVEL = 'NETWORK_LEVEL',
+  INDEX = 'INDEX',
+  WIN_STREAK = 'WIN_STREAK',
+  FINAL_KILLS = 'FINAL_KILLS',
+  FINAL_DEATHS = 'FINAL_DEATHS',
+  FKDR = 'FKDR',
+  WINS = 'WINS',
+  LOSSES = 'LOSSES',
+  WLR = 'WLR',
+  BEDS_BROKEN = 'BEDS_BROKEN',
+  BEDS_LOST = 'BEDS_LOST',
+  BBLR = 'BBLR',
+  KILLS = 'KILLS',
+  DEATHS = 'DEATHS',
+  KDR = 'KDR',
+}
+
+export enum Sort {
+  NONE = 'NONE',
+  VALUE = 'VALUE',
+  ALPHABETICALLY = 'ALPHABETICALLY',
+}
+
+enum Color {
+  PROVIDED = 'PROVIDED',
+  COLOR_CODING = 'COLOR_CODING',
+}
+
+type ColumnDefinition = {
+  displayName: string
+  shortDisplayName?: string
+} & (
+  | {
+      sort: Sort.NONE
+    }
+  | {
+      sort: Sort.VALUE
+      getSortValue: (player: Player, modePrefix: string) => number
+    }
+  | {
+      sort: Sort.ALPHABETICALLY
+      getSortValue: (player: Player, modePrefix: string) => string
+    }
+) &
+  (
+    | {
+        customDisplay: true
+      }
+    | ({
+        customDisplay: false
+        getDisplayValue?: (player: Player, modePrefix: string) => string
+      } & (
+        | {
+            color: Color.PROVIDED
+            getColor: (player: Player, modePrefix: string) => number
+          }
+        | {
+            color: Color.COLOR_CODING
+            formatNumber?: boolean
+            colorCodingThresholds: [
+              number,
+              number,
+              number,
+              number,
+              number,
+              number,
+              number,
+              number
+            ]
+          }
+      ))
+  )
+
+export const columns: { [p: string]: ColumnDefinition } = {
+  [Column.NAME]: {
+    displayName: 'Name',
+    sort: Sort.ALPHABETICALLY,
+    getSortValue: (player) => {
+      return player.hypixelPlayer?.displayname || player.name
+    },
+    customDisplay: true,
+  },
+  [Column.LEVEL]: {
+    displayName: 'Level',
+    sort: Sort.VALUE,
+    getSortValue: (player) => {
+      return player.hypixelBedwarsLevelInfo?.level || 0
+    },
+    customDisplay: true,
+  },
+  [Column.TAG]: {
+    displayName: 'Tag',
+    sort: Sort.NONE,
+    customDisplay: false,
+    getDisplayValue: (player) => {
+      if (player.user?.reportsSummary === 'SNIPER') {
+        return '[SNIPER]'
+      } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
+        return '[SNIPER?]'
+      } else if (player.user?.reportsSummary === 'HACKER') {
+        return '[HACKER]'
+      } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
+        return '[HACKER?]'
+      } else if (player.user?.customTagText) {
+        return `[${player.user?.customTagText}]`
+      } else if (player.user?.role === Role.DEVELOPER) {
+        return '[DEV]'
+      } else if (player.user?.role === Role.COMMUNITY_MANAGER) {
+        return '[CM]'
+      } else if (player.user?.role === Role.HELPER) {
+        return '[HLP]'
+      } else if (player.user?.role === Role.PARTNER) {
+        return '[P]'
+      } else if (player.user?.role === Role.NITRO_BOOSTER) {
+        return '[NB]'
+      } else {
+        return ''
+      }
+    },
+    color: Color.PROVIDED,
+    getColor: (player) => {
+      if (
+        player.user?.reportsSummary === ReportsSummary.SNIPER ||
+        player.user?.reportsSummary === ReportsSummary.HACKER
+      ) {
+        return 0xb91c1c
+      } else if (
+        player.user?.reportsSummary === ReportsSummary.POTENTIAL_SNIPER ||
+        player.user?.reportsSummary === ReportsSummary.POTENTIAL_HACKER
+      ) {
+        return 0xfca5a5
+      } else if (player.user?.customTagColor) {
+        return player.user.customTagColor
+      } else if (player.user?.role === Role.DEVELOPER) {
+        return 0x3b82f6
+      } else if (player.user?.role === Role.COMMUNITY_MANAGER) {
+        return 0xf59e0b
+      } else if (player.user?.role === Role.HELPER) {
+        return 0x22d3ee
+      } else if (player.user?.role === Role.PARTNER) {
+        return 0x22c55e
+      } else if (player.user?.role === Role.NITRO_BOOSTER) {
+        return 0xec4899
+      } else {
+        return 0xffffff
+      }
+    },
+  },
+  [Column.NETWORK_LEVEL]: {
+    displayName: 'Network Level',
+    shortDisplayName: 'N. Level',
+    sort: Sort.VALUE,
+    getSortValue: (player) => {
+      return player.hypixelNetworkLevel?.level || 0
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 75, 150, 250, 500, 750, 1000, 1500],
+    formatNumber: true,
+  },
+  [Column.INDEX]: {
+    displayName: 'Index',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelBedwarsLevelInfo?.level || 0) *
+        (((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'final_kills_bedwars'
+        ] as number | undefined) || 0) /
+          ((player.hypixelPlayer?.stats.Bedwars?.[
+            modePrefix + 'final_deaths_bedwars'
+          ] as number | undefined) || 1)) **
+          2
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [
+      0, 1000, 2500, 4000, 10000, 100000, 250000, 1000000,
+    ],
+    formatNumber: true,
+  },
+  [Column.WIN_STREAK]: {
+    displayName: 'Win Streak',
+    shortDisplayName: 'WS',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'winstreak'] as
+          | number
+          | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 5, 15, 25, 50, 75, 175, 250],
+    formatNumber: true,
+  },
+  [Column.FINAL_KILLS]: {
+    displayName: 'Final Kills',
+    shortDisplayName: 'F. Kills',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'final_kills_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 1000, 2500, 4000, 8000, 12000, 48000, 100000],
+    formatNumber: true,
+  },
+  [Column.FINAL_DEATHS]: {
+    displayName: 'Final Deaths',
+    shortDisplayName: 'F. Deaths',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'final_deaths_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 1000, 2500, 4000, 8000, 12000, 48000, 100000],
+    formatNumber: true,
+  },
+  [Column.FKDR]: {
+    displayName: 'FKDR',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'final_kills_bedwars'
+        ] as number | undefined) || 0) /
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'final_deaths_bedwars'
+        ] as number | undefined) || 1)
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 2, 4, 6, 10, 15, 25, 50],
+    formatNumber: true,
+  },
+  [Column.WINS]: {
+    displayName: 'Wins',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'wins_bedwars'] as
+          | number
+          | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 250, 500, 750, 1000, 1500, 5000, 10000],
+    formatNumber: true,
+  },
+  [Column.LOSSES]: {
+    displayName: 'Losses',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'losses_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 250, 500, 750, 1000, 1500, 5000, 10000],
+    formatNumber: true,
+  },
+  [Column.WLR]: {
+    displayName: 'WLR',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        ((player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'wins_bedwars'] as
+          | number
+          | undefined) || 0) /
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'losses_bedwars'
+        ] as number | undefined) || 1)
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 1, 2, 3, 5, 7, 12, 25],
+    formatNumber: true,
+  },
+  [Column.BEDS_BROKEN]: {
+    displayName: 'Beds Broken',
+    shortDisplayName: 'B. Broken',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'beds_broken_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 750, 1500, 2500, 5000, 10000, 25000, 50000],
+    formatNumber: true,
+  },
+  [Column.BEDS_LOST]: {
+    displayName: 'Beds Lost',
+    shortDisplayName: 'B. Lost',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'beds_lost_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 750, 1500, 2500, 5000, 10000, 25000, 50000],
+    formatNumber: true,
+  },
+  [Column.BBLR]: {
+    displayName: 'BBLR',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'beds_broken_bedwars'
+        ] as number | undefined) || 0) /
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'beds_lost_bedwars'
+        ] as number | undefined) || 1)
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 2, 4, 6, 8, 12, 15, 25],
+    formatNumber: true,
+  },
+  [Column.KILLS]: {
+    displayName: 'Kills',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'kills_bedwars'] as
+          | number
+          | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 1000, 2500, 4000, 8000, 12000, 48000, 100000],
+    formatNumber: true,
+  },
+  [Column.DEATHS]: {
+    displayName: 'Deaths',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        (player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'deaths_bedwars'
+        ] as number | undefined) || 0
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 1000, 2500, 4000, 8000, 12000, 48000, 100000],
+    formatNumber: true,
+  },
+  [Column.KDR]: {
+    displayName: 'KDR',
+    sort: Sort.VALUE,
+    getSortValue: (player, modePrefix) => {
+      return (
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'kills_bedwars'
+        ] as number | undefined) || 0) /
+        ((player.hypixelPlayer?.stats.Bedwars?.[
+          modePrefix + 'deaths_bedwars'
+        ] as number | undefined) || 1)
+      )
+    },
+    customDisplay: false,
+    color: Color.COLOR_CODING,
+    colorCodingThresholds: [0, 2, 4, 6, 10, 15, 25, 50],
+    formatNumber: true,
+  },
+}
+
+enum Role {
+  NONE = 'NONE',
+  NITRO_BOOSTER = 'NITRO_BOOSTER',
+  PARTNER = 'PARTNER',
+  HELPER = 'HELPER',
+  COMMUNITY_MANAGER = 'COMMUNITY_MANAGER',
+  DEVELOPER = 'DEVELOPER',
+}
+
+export enum ReportsSummary {
+  NONE = 'NONE',
+  POTENTIAL_HACKER = 'POTENTIAL_HACKER',
+  HACKER = 'HACKER',
+  POTENTIAL_SNIPER = 'POTENTIAL_SNIPER',
+  SNIPER = 'SNIPER',
+}
+
+export interface User {
+  id: string
+  minecraftId: string
+  role: Role
+  customTagText: string | null
+  customTagColor: number | null
+  reportsSummary: ReportsSummary
+}
+
+const store = new Vuex.Store({
   modules: {
     config: {
       state: () => ({
@@ -50,6 +493,7 @@ export default new Vuex.Store({
           | 'FOUR_FOUR_LUCKY',
         showDreamModes: false,
         showGuildTag: false,
+        showHackersAndSnipersOnTop: true,
         autoReportSnipers: true,
         logFileFormat: 'STANDARD' as 'STANDARD' | 'LUNAR_CLIENT' | 'LABYMOD',
         logFilePathPreset: 'STANDARD' as
@@ -68,27 +512,56 @@ export default new Vuex.Store({
         autoAddMentions: true,
         autoRemoveAllOnServerChange: true,
         autoRemoveAllOnWho: true,
-        sortBy: 'INDEX' as
-          | 'INDEX'
-          | 'LEVEL'
-          | 'FKDR'
-          | 'WLR'
-          | 'WS'
-          | 'FINALS'
-          | 'WINS',
+        sortBy: Column.INDEX as Column,
         sortAscending: false,
         keyboardShortcutMinimizeUnminize: '',
         keyboardShortcutClearPlayers: '',
         customFontFamily: 'system-ui',
         customFontSize: '16px',
+        columns: {
+          0: Column.TAG,
+          1: Column.LEVEL,
+          2: Column.NAME,
+          3: Column.WIN_STREAK,
+          4: Column.FKDR,
+          5: Column.WLR,
+          6: Column.FINAL_KILLS,
+          7: Column.WINS,
+          8: Column.INDEX,
+          9: null,
+          10: null,
+          11: null,
+          12: null,
+          13: null,
+          14: null,
+          15: null,
+          16: null,
+          17: null,
+        } as {
+          [p: number]: Column | null
+        },
       }),
       getters: {
         modePrefix: (state) =>
           state.mode === 'OVERALL' ? '' : state.mode.toLowerCase() + '_',
+        activeColumns: (state) => {
+          const activeColumns = []
+
+          for (let i = 0; i < 18; i++) {
+            if (state.columns[i]) {
+              activeColumns.push(state.columns[i])
+            }
+          }
+
+          return activeColumns
+        },
       },
       mutations: {
         set(state, [key, newValue]) {
           state[key] = newValue
+        },
+        setColumn(state, [i, newColumn]: [number, Column]) {
+          state.columns[i] = newColumn
         },
       },
       actions: {
@@ -234,15 +707,7 @@ export default new Vuex.Store({
     temp: {
       state: () => ({
         apiKeyValid: null as boolean | null,
-        players: [] as {
-          name: string
-          id: string | null
-          nicked: boolean | null
-          hypixelPlayer: Components.Schemas.Player | null
-          hypixelPlayerRank: PlayerRank | null
-          hypixelBedwarsLevelInfo: BedwarsLevelInfo | null
-          hypixelGuild: Components.Schemas.Guild | null
-        }[],
+        players: [] as Player[],
         logFilePathReadable: null as boolean | null,
         name: null as string | null,
         lastMessageServerChange: false,
@@ -257,12 +722,15 @@ export default new Vuex.Store({
         },
         removePlayerByName(state, name) {
           state.players = state.players.filter(
-            (player: any) => player.name !== name
+            (player: Player) => player.name !== name
           )
         },
         updatePlayerByName(state, [name, newValue]) {
+          if (!state.players.find((player: Player) => player.name === name))
+            return
+
           state.players = [
-            ...state.players.filter((player: any) => player.name !== name),
+            ...state.players.filter((player: Player) => player.name !== name),
             newValue,
           ]
         },
@@ -280,10 +748,14 @@ export default new Vuex.Store({
         },
       },
       actions: {
-        async addPlayerName({ commit, state, rootState }, name: string) {
+        async addPlayerName(
+          { commit, state, rootState },
+          [name, apolloClient]
+        ) {
           if (
             state.players.find(
-              (player: any) => player.name.toLowerCase() === name.toLowerCase()
+              (player: Player) =>
+                player.name.toLowerCase() === name.toLowerCase()
             )
           )
             return
@@ -306,6 +778,8 @@ export default new Vuex.Store({
             hypixelPlayerRank: null,
             hypixelBedwarsLevelInfo: null,
             hypixelGuild: null,
+            hypixelNetworkLevel: null,
+            user: null,
           })
 
           const minecraftProfile: AxiosResponse<{
@@ -389,6 +863,12 @@ export default new Vuex.Store({
                   )
                 : null
 
+              const hypixelNetworkLevel = await window.ipcRenderer.invoke(
+                'hypixelUtils',
+                'getNetworkLevel',
+                hypixelPlayer
+              )
+
               commit('updatePlayerByName', [
                 name,
                 {
@@ -397,6 +877,35 @@ export default new Vuex.Store({
                   hypixelPlayerRank,
                   hypixelBedwarsLevelInfo,
                   hypixelGuild,
+                  hypixelNetworkLevel,
+                },
+              ])
+
+              const user = await apolloClient
+                .query({
+                  query: gql`
+                    query ($minecraftId: ID!) {
+                      userByMinecraftId(minecraftId: $minecraftId) {
+                        id
+                        minecraftId
+                        role
+                        customTagText
+                        customTagColor
+                        reportsSummary
+                      }
+                    }
+                  `,
+                  variables: {
+                    minecraftId: minecraftProfile.data.id,
+                  },
+                })
+                .catch(() => null)
+
+              commit('updatePlayerByName', [
+                name,
+                {
+                  ...state.players.find((player: any) => player.name === name),
+                  user: user?.data?.userByMinecraftId || null,
                 },
               ])
             } catch (error) {
@@ -455,3 +964,5 @@ export default new Vuex.Store({
     }),
   ],
 })
+
+export default store

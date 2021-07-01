@@ -113,58 +113,7 @@
             />
           </div>
 
-          <div class="flex space-x-2 items-center">
-            <div>Mode:</div>
-
-            <select
-              class="bg-transparent"
-              :value="$store.state.config.mode"
-              @change="
-                $store.commit('config/set', ['mode', $event.target.value])
-              "
-            >
-              <option value="OVERALL" class="bg-gray-900">Overall</option>
-              <option value="EIGHT_ONE" class="bg-gray-900">Solo</option>
-              <option value="EIGHT_TWO" class="bg-gray-900">Doubles</option>
-              <option value="FOUR_THREE" class="bg-gray-900">3v3v3v3</option>
-              <option value="FOUR_FOUR" class="bg-gray-900">4v4v4v4</option>
-              <option value="TWO_FOUR" class="bg-gray-900">4v4</option>
-
-              <template v-if="$store.state.config.showDreamModes">
-                <option value="EIGHT_TWO_RUSH" class="bg-gray-900">
-                  Rush Doubles
-                </option>
-                <option value="FOUR_FOUR_RUSH" class="bg-gray-900">
-                  Rush 4v4v4v4
-                </option>
-                <option value="EIGHT_TWO_ULTIMATE" class="bg-gray-900">
-                  Ultimate Doubles
-                </option>
-                <option value="FOUR_FOUR_ULTIMATE" class="bg-gray-900">
-                  Ultimate 4v4v4v4
-                </option>
-                <option value="CASTLE" class="bg-gray-900">Castle</option>
-                <option value="EIGHT_TWO_VOIDLESS" class="bg-gray-900">
-                  Voidless Doubles
-                </option>
-                <option value="FOUR_FOUR_VOIDLESS" class="bg-gray-900">
-                  Voidless 4v4v4v4
-                </option>
-                <option value="EIGHT_TWO_ARMED" class="bg-gray-900">
-                  Armed Doubles
-                </option>
-                <option value="FOUR_FOUR_ARMED" class="bg-gray-900">
-                  Armed 4v4v4v4
-                </option>
-                <option value="EIGHT_TWO_LUCKY" class="bg-gray-900">
-                  Lucky Blocks Doubles
-                </option>
-                <option value="FOUR_FOUR_LUCKY" class="bg-gray-900">
-                  Lucky Blocks 4v4v4v4
-                </option>
-              </template>
-            </select>
-          </div>
+          <mode-select />
 
           <div class="flex items-center">
             <div class="mr-2">Show Dream Modes:</div>
@@ -191,6 +140,21 @@
                 $store.commit('config/set', [
                   'showGuildTag',
                   !$store.state.config.showGuildTag,
+                ])
+              "
+            />
+          </div>
+
+          <div class="flex items-center">
+            <div class="mr-2">Hackers And Snipers On Top:</div>
+
+            <input
+              type="checkbox"
+              :checked="$store.state.config.showHackersAndSnipersOnTop"
+              @change="
+                $store.commit('config/set', [
+                  'showHackersAndSnipersOnTop',
+                  !$store.state.config.showHackersAndSnipersOnTop,
                 ])
               "
             />
@@ -363,6 +327,65 @@
                 ])
               "
             />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3 flex items-center space-x-1">
+          <span> Columns </span>
+
+          <button @click="columnsVisible = !columnsVisible">
+            <svg
+              v-if="columnsVisible"
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <svg
+              v-else
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap" v-if="columnsVisible">
+          <div v-for="(_, i) in columnsShownCount" :key="i">
+            <select
+              :value="$store.state.config.columns[i]"
+              @change="
+                $store.commit('config/setColumn', [i, $event.target.value])
+              "
+              class="bg-transparent m-2"
+            >
+              <option :value="null" class="bg-gray-900">None</option>
+
+              <option
+                v-for="[key, column] in Object.entries(columns)"
+                :key="key"
+                :value="key"
+                class="bg-gray-900"
+              >
+                {{ column.displayName }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -556,16 +579,36 @@
 <script lang="ts">
 import { onLogout } from '@/vue-apollo'
 import Vue from 'vue'
+import ModeSelect from '@/components/ModeSelect.vue'
+import { columns } from '@/store'
 
 export default Vue.extend({
+  components: { ModeSelect },
   data() {
     return {
+      columnsVisible: false,
       advancedVisible: false,
     }
   },
   computed: {
     version() {
       return process.env.VUE_APP_VERSION
+    },
+    columnsShownCount() {
+      if (this.$store.state.config.columns[17]) {
+        return 18
+      }
+
+      for (let i = 16; i >= 0; i--) {
+        if (this.$store.state.config.columns[i]) {
+          return i + 2
+        }
+      }
+
+      return 1
+    },
+    columns() {
+      return columns
     },
   },
   methods: {

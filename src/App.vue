@@ -203,7 +203,10 @@ export default Vue.extend({
         )
 
         if (joinMatch !== null) {
-          await this.$store.dispatch('temp/addPlayerName', joinMatch[1])
+          await this.$store.dispatch('temp/addPlayerName', [
+            joinMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -221,7 +224,10 @@ export default Vue.extend({
 
           await Promise.all(
             playerNames.map((name) =>
-              this.$store.dispatch('temp/addPlayerName', name)
+              this.$store.dispatch('temp/addPlayerName', [
+                name,
+                this.$apollo.getClient(),
+              ])
             )
           )
 
@@ -304,7 +310,10 @@ export default Vue.extend({
         )
 
         if (leaderMatch !== null) {
-          await this.$store.dispatch('temp/addPlayerName', leaderMatch[1])
+          await this.$store.dispatch('temp/addPlayerName', [
+            leaderMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -319,7 +328,10 @@ export default Vue.extend({
             .map((playerFullName) => playerFullName.split(' ').slice(-1)[0])
           await Promise.all(
             moderatorNames.map((name) =>
-              this.$store.dispatch('temp/addPlayerName', name)
+              this.$store.dispatch('temp/addPlayerName', [
+                name,
+                this.$apollo.getClient(),
+              ])
             )
           )
 
@@ -336,7 +348,10 @@ export default Vue.extend({
             .map((playerFullName) => playerFullName.split(' ').slice(-1)[0])
           await Promise.all(
             memberNames.map((name) =>
-              this.$store.dispatch('temp/addPlayerName', name)
+              this.$store.dispatch('temp/addPlayerName', [
+                name,
+                this.$apollo.getClient(),
+              ])
             )
           )
 
@@ -348,7 +363,10 @@ export default Vue.extend({
         )
 
         if (joinedLeaderMatch !== null) {
-          await this.$store.dispatch('temp/addPlayerName', joinedLeaderMatch[1])
+          await this.$store.dispatch('temp/addPlayerName', [
+            joinedLeaderMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -363,7 +381,10 @@ export default Vue.extend({
             .map((playerFullName) => playerFullName.split(' ').slice(-1)[0])
           await Promise.all(
             joinedMemberNames.map((name) =>
-              this.$store.dispatch('temp/addPlayerName', name)
+              this.$store.dispatch('temp/addPlayerName', [
+                name,
+                this.$apollo.getClient(),
+              ])
             )
           )
 
@@ -433,7 +454,10 @@ export default Vue.extend({
         )
 
         if (lobbyChatMatch !== null) {
-          await this.$store.dispatch('temp/addPlayerName', lobbyChatMatch[1])
+          await this.$store.dispatch('temp/addPlayerName', [
+            lobbyChatMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -453,7 +477,10 @@ export default Vue.extend({
             .toLowerCase()
             .includes(this.$store.state.temp.name.toLowerCase())
         ) {
-          await this.$store.dispatch('temp/addPlayerName', mentionsMatch[1])
+          await this.$store.dispatch('temp/addPlayerName', [
+            mentionsMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -491,7 +518,10 @@ export default Vue.extend({
         )
 
         if (addPlayerMatch !== null) {
-          this.$store.dispatch('temp/addPlayerName', addPlayerMatch[1])
+          this.$store.dispatch('temp/addPlayerName', [
+            addPlayerMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }

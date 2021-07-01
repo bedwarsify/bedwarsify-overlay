@@ -2,7 +2,7 @@
   <div>
     <div class="w-full h-full">
       <div v-if="$store.state.temp.apiKeyValid" class="w-full h-full flex">
-        <app-main />
+        <players />
       </div>
 
       <div
@@ -80,10 +80,10 @@
 </template>
 
 <script lang="ts">
-import AppMain from '@/components/AppMain.vue'
+import Players from '@/components/Players.vue'
 
 export default {
-  components: { AppMain },
+  components: { Players },
   methods: {
     openExternal(url: string) {
       window.ipcRenderer.send('openExternal', url)
