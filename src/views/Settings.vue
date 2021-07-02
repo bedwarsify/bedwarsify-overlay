@@ -459,6 +459,72 @@
 
       <div>
         <div class="font-semibold mb-3 flex items-center space-x-1">
+          <span> Sounds </span>
+
+          <button @click="soundsVisible = !soundsVisible">
+            <svg
+              v-if="soundsVisible"
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <svg
+              v-else
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-3" v-if="soundsVisible">
+          <div class="space-y-2">
+            <div class="flex space-x-2 items-center">
+              <div>Hackers and Snipers:</div>
+
+              <select
+                class="bg-transparent"
+                :value="$store.state.config.hackersSnipersSoundEffect"
+                @change="
+                  $store.commit('config/set', [
+                    'hackersSnipersSoundEffect',
+                    $event.target.value,
+                  ])
+                "
+              >
+                <option :value="null" class="bg-gray-900">None</option>
+
+                <option
+                  v-for="[key, soundEffect] in Object.entries(soundEffects)"
+                  :key="key"
+                  :value="key"
+                  class="bg-gray-900"
+                >
+                  {{ soundEffect.displayName }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3 flex items-center space-x-1">
           <span> Advanced </span>
 
           <button @click="advancedVisible = !advancedVisible">
@@ -581,12 +647,14 @@ import { onLogout } from '@/vue-apollo'
 import Vue from 'vue'
 import ModeSelect from '@/components/ModeSelect.vue'
 import { columns } from '@/store'
+import soundEffects from '@/sound-effects'
 
 export default Vue.extend({
   components: { ModeSelect },
   data() {
     return {
       columnsVisible: false,
+      soundsVisible: false,
       advancedVisible: false,
     }
   },
@@ -609,6 +677,9 @@ export default Vue.extend({
     },
     columns() {
       return columns
+    },
+    soundEffects() {
+      return soundEffects
     },
   },
   methods: {

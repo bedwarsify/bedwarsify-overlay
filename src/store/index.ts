@@ -9,6 +9,7 @@ import {
   PlayerRank,
 } from '@zikeji/hypixel'
 import gql from 'graphql-tag'
+import soundEffects, { SoundEffect } from '@/sound-effects'
 
 Vue.use(Vuex)
 
@@ -516,6 +517,7 @@ const store = new Vuex.Store({
         sortAscending: false,
         keyboardShortcutMinimizeUnminize: '',
         keyboardShortcutClearPlayers: '',
+        hackersSnipersSoundEffect: null as SoundEffect | null,
         customFontFamily: 'system-ui',
         customFontSize: '16px',
         columns: {
@@ -881,7 +883,7 @@ const store = new Vuex.Store({
                 },
               ])
 
-              const user = await apolloClient
+              const userResponse = await apolloClient
                 .query({
                   query: gql`
                     query ($minecraftId: ID!) {
@@ -901,13 +903,25 @@ const store = new Vuex.Store({
                 })
                 .catch(() => null)
 
+              const user =
+                (userResponse?.data?.userByMinecraftId as User) || null
+
               commit('updatePlayerByName', [
                 name,
                 {
                   ...state.players.find((player: any) => player.name === name),
-                  user: user?.data?.userByMinecraftId || null,
+                  user: user,
                 },
               ])
+
+              if (
+                user?.reportsSummary !== ReportsSummary.NONE &&
+                (rootState as any).config.hackersSnipersSoundEffect
+              ) {
+                await soundEffects[
+                  (rootState as any).config.hackersSnipersSoundEffect
+                ].audio.play()
+              }
             } catch (error) {
               commit('updatePlayerByName', [
                 name,
