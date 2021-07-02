@@ -23,6 +23,7 @@ export interface Player {
   hypixelGuild: Components.Schemas.Guild | null
   hypixelNetworkLevel: NetworkLevel | null
   user: User | null
+  suspicious: boolean | null
 }
 
 export interface TrackingPlayer {
@@ -146,7 +147,6 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.NONE,
     customDisplay: false,
     getDisplayValue: (player, modePrefix, options) => {
-      console.log(options?.shortTags)
       if (player.user?.reportsSummary === 'SNIPER') {
         return options?.shortTags ? '[S]' : '[SNIPER]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
@@ -155,6 +155,8 @@ export const columns: { [p: string]: ColumnDefinition } = {
         return options?.shortTags ? '[H]' : '[HACKER]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
         return options?.shortTags ? '[H?]' : '[HACKER?]'
+      } else if (player.suspicious) {
+        return options?.shortTags ? '[S@]' : '[SNIPER@]'
       } else if (player.user?.customTagText) {
         return `[${player.user?.customTagText}]`
       } else if (player.user?.role === Role.DEVELOPER) {
@@ -180,7 +182,8 @@ export const columns: { [p: string]: ColumnDefinition } = {
         return 0xb91c1c
       } else if (
         player.user?.reportsSummary === ReportsSummary.POTENTIAL_SNIPER ||
-        player.user?.reportsSummary === ReportsSummary.POTENTIAL_HACKER
+        player.user?.reportsSummary === ReportsSummary.POTENTIAL_HACKER ||
+        player.suspicious
       ) {
         return 0xfca5a5
       } else if (player.user?.customTagColor) {
@@ -790,6 +793,7 @@ const store = new Vuex.Store({
             hypixelGuild: null,
             hypixelNetworkLevel: null,
             user: null,
+            suspicious: null,
           })
 
           const minecraftProfile: AxiosResponse<{
@@ -903,6 +907,7 @@ const store = new Vuex.Store({
                         customTagColor
                         reportsSummary
                       }
+                      suspicious(minecraftId: $minecraftId)
                     }
                   `,
                   variables: {
@@ -912,18 +917,21 @@ const store = new Vuex.Store({
                 .catch(() => null)
 
               const user =
-                (userResponse?.data?.userByMinecraftId as User) || null
+                (userResponse?.data?.userByMinecraftId as User | null) || null
+              const suspicious =
+                (userResponse?.data?.suspicious as boolean | null) || null
 
               commit('updatePlayerByName', [
                 name,
                 {
                   ...state.players.find((player: any) => player.name === name),
-                  user: user,
+                  user,
+                  suspicious,
                 },
               ])
 
               if (
-                user?.reportsSummary !== ReportsSummary.NONE &&
+                (user?.reportsSummary !== ReportsSummary.NONE || suspicious) &&
                 (rootState as any).config.hackersSnipersSoundEffect
               ) {
                 await soundEffects[
