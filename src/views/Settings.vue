@@ -589,6 +589,21 @@
             />
           </div>
 
+          <div class="flex items-center">
+            <div class="mr-2">Short Tags:</div>
+
+            <input
+              type="checkbox"
+              :checked="$store.state.config.shortTags"
+              @change="
+                $store.commit('config/set', [
+                  'shortTags',
+                  !$store.state.config.shortTags,
+                ])
+              "
+            />
+          </div>
+
           <div class="flex">
             <div class="mr-2">Custom Font Family:</div>
 

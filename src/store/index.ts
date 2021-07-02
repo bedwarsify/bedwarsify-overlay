@@ -95,7 +95,13 @@ type ColumnDefinition = {
       }
     | ({
         customDisplay: false
-        getDisplayValue?: (player: Player, modePrefix: string) => string
+        getDisplayValue?: (
+          player: Player,
+          modePrefix: string,
+          options?: {
+            shortTags?: boolean
+          }
+        ) => string
       } & (
         | {
             color: Color.PROVIDED
@@ -139,15 +145,16 @@ export const columns: { [p: string]: ColumnDefinition } = {
     displayName: 'Tag',
     sort: Sort.NONE,
     customDisplay: false,
-    getDisplayValue: (player) => {
+    getDisplayValue: (player, modePrefix, options) => {
+      console.log(options?.shortTags)
       if (player.user?.reportsSummary === 'SNIPER') {
-        return '[SNIPER]'
+        return options?.shortTags ? '[S]' : '[SNIPER]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
-        return '[SNIPER?]'
+        return options?.shortTags ? '[S?]' : '[SNIPER?]'
       } else if (player.user?.reportsSummary === 'HACKER') {
-        return '[HACKER]'
+        return options?.shortTags ? '[H]' : '[HACKER]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
-        return '[HACKER?]'
+        return options?.shortTags ? '[H?]' : '[HACKER?]'
       } else if (player.user?.customTagText) {
         return `[${player.user?.customTagText}]`
       } else if (player.user?.role === Role.DEVELOPER) {
@@ -494,8 +501,6 @@ const store = new Vuex.Store({
           | 'FOUR_FOUR_LUCKY',
         showDreamModes: false,
         showGuildTag: false,
-        showHackersAndSnipersOnTop: true,
-        autoReportSnipers: true,
         logFileFormat: 'STANDARD' as 'STANDARD' | 'LUNAR_CLIENT' | 'LABYMOD',
         logFilePathPreset: 'STANDARD' as
           | 'STANDARD'
@@ -518,6 +523,9 @@ const store = new Vuex.Store({
         keyboardShortcutMinimizeUnminize: '',
         keyboardShortcutClearPlayers: '',
         hackersSnipersSoundEffect: null as SoundEffect | null,
+        showHackersAndSnipersOnTop: true,
+        autoReportSnipers: true,
+        shortTags: false,
         customFontFamily: 'system-ui',
         customFontSize: '16px',
         columns: {

@@ -160,7 +160,10 @@
                       columns[columnKey].getDisplayValue
                         ? columns[columnKey].getDisplayValue(
                             player,
-                            $store.getters['config/modePrefix']
+                            $store.getters['config/modePrefix'],
+                            {
+                              shortTags: $store.state.config.shortTags,
+                            }
                           )
                         : columns[columnKey].getSortValue(
                             player,
