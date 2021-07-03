@@ -131,13 +131,22 @@
                         .padStart(6, '0')
                     : 'ffffff'),
               }"
+              class="text-center"
             >
               <template v-if="player.hypixelPlayer">
                 <template v-if="columns[columnKey].customDisplay">
                   <player-name :player="player" v-if="columnKey === 'NAME'" />
+
                   <player-level
                     :player="player"
                     v-else-if="columnKey === 'LEVEL'"
+                  />
+
+                  <img
+                    :src="`https://crafatar.com/avatars/${player.id}?size=16&overlay`"
+                    alt=""
+                    v-else-if="columnKey === 'HEAD'"
+                    class="inline-flex"
                   />
                 </template>
 

@@ -46,6 +46,7 @@ export enum Column {
   NAME = 'NAME',
   LEVEL = 'LEVEL',
   TAG = 'TAG',
+  HEAD = 'HEAD',
   NETWORK_LEVEL = 'NETWORK_LEVEL',
   INDEX = 'INDEX',
   WIN_STREAK = 'WIN_STREAK',
@@ -202,6 +203,12 @@ export const columns: { [p: string]: ColumnDefinition } = {
         return 0xffffff
       }
     },
+  },
+  [Column.HEAD]: {
+    displayName: 'Head',
+    shortDisplayName: 'H',
+    sort: Sort.NONE,
+    customDisplay: true,
   },
   [Column.NETWORK_LEVEL]: {
     displayName: 'Network Level',
