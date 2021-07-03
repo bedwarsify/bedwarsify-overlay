@@ -110,7 +110,8 @@
               :key="columnKey"
               :style="{
                 color:
-                  '#' + player.hypixelPlayer
+                  '#' +
+                  (player.hypixelPlayer
                     ? (columns[columnKey].color === 'PROVIDED'
                         ? columns[columnKey].getColor(
                             player,
@@ -128,7 +129,7 @@
                       )
                         .toString(16)
                         .padStart(6, '0')
-                    : 'ffffff',
+                    : 'ffffff'),
               }"
             >
               <template v-if="player.hypixelPlayer">
