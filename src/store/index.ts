@@ -931,7 +931,9 @@ const store = new Vuex.Store({
               ])
 
               if (
-                (user?.reportsSummary !== ReportsSummary.NONE || suspicious) &&
+                ((user?.reportsSummary &&
+                  user?.reportsSummary !== ReportsSummary.NONE) ||
+                  suspicious) &&
                 (rootState as any).config.hackersSnipersSoundEffect
               ) {
                 await soundEffects[
