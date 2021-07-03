@@ -110,24 +110,25 @@
               :key="columnKey"
               :style="{
                 color:
-                  '#' +
-                  (columns[columnKey].color === 'PROVIDED'
-                    ? columns[columnKey].getColor(
-                        player,
-                        $store.getters['config/modePrefix']
+                  '#' + player.hypixelPlayer
+                    ? (columns[columnKey].color === 'PROVIDED'
+                        ? columns[columnKey].getColor(
+                            player,
+                            $store.getters['config/modePrefix']
+                          )
+                        : columns[columnKey].color === 'COLOR_CODING'
+                        ? colorCode(
+                            columns[columnKey].getSortValue(
+                              player,
+                              $store.getters['config/modePrefix']
+                            ),
+                            columns[columnKey].colorCodingThresholds
+                          )
+                        : 0xffffff
                       )
-                    : columns[columnKey].color === 'COLOR_CODING'
-                    ? colorCode(
-                        columns[columnKey].getSortValue(
-                          player,
-                          $store.getters['config/modePrefix']
-                        ),
-                        columns[columnKey].colorCodingThresholds
-                      )
-                    : 0xffffff
-                  )
-                    .toString(16)
-                    .padStart(6, '0'),
+                        .toString(16)
+                        .padStart(6, '0')
+                    : 'ffffff',
               }"
             >
               <template v-if="player.hypixelPlayer">
@@ -178,6 +179,10 @@
                 <template v-if="columnKey === 'NAME'">
                   {{ player.name }}
                 </template>
+
+                <span v-else-if="columnKey === 'TAG'" class="text-green-500">
+                  {{ $store.state.config.shortTags ? '[N]' : '[NICKED]' }}
+                </span>
 
                 <template v-else> ? </template>
               </template>
