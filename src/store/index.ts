@@ -576,12 +576,14 @@ const store = new Vuex.Store({
 
           return activeColumns
         },
-        backgroundColor: (state) => {
+        backgroundColor: (state, getters, rootState: any) => {
           const color = /^#[A-Fa-f0-9]{6}$/.test(state.customBackgroundColor)
             ? state.customBackgroundColor.slice(1)
             : '18181b'
 
-          return `#${color}${Math.floor(state.opacity * 255)
+          return `#${color}${Math.floor(
+            (rootState.temp.capturingScreenshot ? 1 : state.opacity) * 255
+          )
             .toString(16)
             .padStart(2, '0')}`
         },
