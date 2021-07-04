@@ -18,7 +18,7 @@ import Vue from 'vue'
 import gql from 'graphql-tag'
 import { record } from '@/db'
 import uuid from 'uuid'
-import { Player } from '@/store'
+import { Player, PlayerSource } from '@/store'
 
 export default Vue.extend({
   data() {
@@ -184,19 +184,22 @@ export default Vue.extend({
         }
 
         this.$store.commit('temp/setLastMessageServerChange', true)
+        this.$store.commit('temp/setPlayersCount', null)
 
         return
       }
 
       if (this.$store.state.config.autoAddPlayers) {
         const joinMatch = message.match(
-          /^([A-Za-z0-9_]{3,16}) has joined \([0-9]{1,2}\/[0-9]{1,2}\)!$/
+          /^([A-Za-z0-9_]{3,16}) has joined \(([0-9]{1,2})\/[0-9]{1,2}\)!$/
         )
 
         if (joinMatch !== null) {
+          this.$store.commit('temp/setPlayersCount', Number(joinMatch[2]))
           await this.$store.dispatch('temp/addPlayerName', [
             joinMatch[1],
             this.$apollo.getClient(),
+            PlayerSource.PLAYERS,
           ])
 
           return
@@ -213,11 +216,14 @@ export default Vue.extend({
             this.$store.commit('temp/clearPlayers')
           }
 
+          this.$store.commit('temp/setPlayersCount', playerNames.length)
+
           await Promise.all(
             playerNames.map((name) =>
               this.$store.dispatch('temp/addPlayerName', [
                 name,
                 this.$apollo.getClient(),
+                PlayerSource.PLAYERS,
               ])
             )
           )
@@ -228,6 +234,13 @@ export default Vue.extend({
         const quitMatch = message.match(/^([A-Za-z0-9_]{3,16}) has quit!$/)
 
         if (quitMatch !== null) {
+          if (this.$store.state.temp.playersCount) {
+            this.$store.commit(
+              'temp/setPlayersCount',
+              this.$store.state.temp.playersCount - 1
+            )
+          }
+
           await this.$store.commit('temp/removePlayerByName', quitMatch[1])
 
           return

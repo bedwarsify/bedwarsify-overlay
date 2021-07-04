@@ -213,13 +213,28 @@
         </tbody>
       </table>
     </div>
+
+    <div
+      class="p-2 bg-red-600"
+      :style="$store.getters['config/opacityStyle']"
+      v-if="missingPlayersWarning"
+    >
+      Missing Players! Type /who
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import ModeSelect from '@/components/ModeSelect.vue'
-import { Column, columns, ReportsSummary, Sort } from '@/store'
+import {
+  Column,
+  columns,
+  Player,
+  PlayerSource,
+  ReportsSummary,
+  Sort,
+} from '@/store'
 import PlayerName from '@/components/PlayerName.vue'
 import PlayerLevel from '@/components/PlayerLevel.vue'
 import ReportModal from '@/components/ReportModal.vue'
@@ -320,6 +335,24 @@ export default Vue.extend({
           return a.name.localeCompare(b.name)
         }
       })
+    },
+    missingPlayersWarning() {
+      if (
+        !this.$store.state.config.missingPlayersWarning ||
+        !this.$store.state.temp.playersCount
+      )
+        return false
+
+      if (
+        this.$store.state.temp.playersCount >
+        this.$store.state.temp.players.filter(
+          (player: Player) => player.source === PlayerSource.PLAYERS
+        ).length
+      ) {
+        return true
+      } else {
+        return false
+      }
     },
   },
   methods: {

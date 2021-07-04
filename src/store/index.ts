@@ -24,6 +24,7 @@ export interface Player {
   hypixelNetworkLevel: NetworkLevel | null
   user: User | null
   suspicious: boolean | null
+  source: PlayerSource | undefined
 }
 
 export interface TrackingPlayer {
@@ -484,6 +485,10 @@ export interface User {
   reportsSummary: ReportsSummary
 }
 
+export enum PlayerSource {
+  PLAYERS = 'PLAYERS',
+}
+
 const store = new Vuex.Store({
   modules: {
     config: {
@@ -536,6 +541,7 @@ const store = new Vuex.Store({
         showHackersAndSnipersOnTop: true,
         autoReportSnipers: true,
         shortTags: false,
+        missingPlayersWarning: true,
         customFontFamily: 'system-ui',
         customFontSize: '16px',
         customBackgroundColor: '#18181b',
@@ -586,6 +592,13 @@ const store = new Vuex.Store({
           )
             .toString(16)
             .padStart(2, '0')}`
+        },
+        opacityStyle: (state, getters, rootState: any) => {
+          return {
+            '--tw-bg-opacity': rootState.temp.capturingScreenshot
+              ? 1
+              : state.opacity,
+          }
         },
       },
       mutations: {
@@ -744,6 +757,7 @@ const store = new Vuex.Store({
         name: null as string | null,
         lastMessageServerChange: false,
         capturingScreenshot: false,
+        playersCount: null as number | null,
       }),
       mutations: {
         setApiKeyValid(state, newValue) {
@@ -778,11 +792,14 @@ const store = new Vuex.Store({
         setCapturingScreenshot(state, newValue: boolean) {
           state.capturingScreenshot = newValue
         },
+        setPlayersCount(state, newValue: number | null) {
+          state.playersCount = newValue
+        },
       },
       actions: {
         async addPlayerName(
           { commit, state, rootState },
-          [name, apolloClient]
+          [name, apolloClient, source]
         ) {
           if (
             state.players.find(
@@ -813,6 +830,7 @@ const store = new Vuex.Store({
             hypixelNetworkLevel: null,
             user: null,
             suspicious: null,
+            source,
           })
 
           const minecraftProfile: AxiosResponse<{

@@ -600,6 +600,21 @@
             />
           </div>
 
+          <div class="flex items-center">
+            <div class="mr-2">Missing Players Warning:</div>
+
+            <input
+              type="checkbox"
+              :checked="$store.state.config.missingPlayersWarning"
+              @change="
+                $store.commit('config/set', [
+                  'missingPlayersWarning',
+                  !$store.state.config.missingPlayersWarning,
+                ])
+              "
+            />
+          </div>
+
           <div class="flex">
             <div class="mr-2">Custom Font Family:</div>
 
