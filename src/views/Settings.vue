@@ -180,8 +180,6 @@
               "
             >
               <option value="STANDARD" class="bg-gray-900">Standard</option>
-
-              <option value="LABYMOD" class="bg-gray-900">LabyMod</option>
             </select>
           </div>
 
@@ -207,8 +205,6 @@
               <option value="BADLION_CLIENT" class="bg-gray-900">
                 Badlion Client
               </option>
-
-              <option value="LABYMOD" class="bg-gray-900">LabyMod</option>
 
               <option value="PVPLOUNGE" class="bg-gray-900">PvPLounge</option>
 
