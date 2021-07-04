@@ -647,6 +647,34 @@
               Reset
             </button>
           </div>
+
+          <div class="flex">
+            <div class="mr-2">Custom Background Color:</div>
+
+            <input
+              class="bg-transparent border-b flex-grow max-w-[8rem]"
+              :value="$store.state.config.customBackgroundColor"
+              @change="
+                $store.commit('config/set', [
+                  'customBackgroundColor',
+                  $event.target.value,
+                ])
+              "
+            />
+
+            <button
+              v-if="$store.state.config.customBackgroundColor !== '#18181b'"
+              @click="
+                $store.commit('config/set', [
+                  'customBackgroundColor',
+                  '#18181b',
+                ])
+              "
+              class="ml-2"
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </div>
     </div>

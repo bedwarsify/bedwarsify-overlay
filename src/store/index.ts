@@ -538,6 +538,7 @@ const store = new Vuex.Store({
         shortTags: false,
         customFontFamily: 'system-ui',
         customFontSize: '16px',
+        customBackgroundColor: '#18181b',
         columns: {
           0: Column.TAG,
           1: Column.LEVEL,
@@ -574,6 +575,15 @@ const store = new Vuex.Store({
           }
 
           return activeColumns
+        },
+        backgroundColor: (state) => {
+          const color = /^#[A-Fa-f0-9]{6}$/.test(state.customBackgroundColor)
+            ? state.customBackgroundColor.slice(1)
+            : '18181b'
+
+          return `#${color}${Math.floor(state.opacity * 255)
+            .toString(16)
+            .padStart(2, '0')}`
         },
       },
       mutations: {

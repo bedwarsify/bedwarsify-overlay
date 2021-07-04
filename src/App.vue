@@ -1,19 +1,9 @@
 <template>
   <div
-    class="
-      bg-gray-900
-      w-screen
-      h-screen
-      text-white
-      flex flex-col
-      select-none
-      p-px
-    "
+    class="w-screen h-screen text-white flex flex-col select-none p-px"
     :style="{
-      '--tw-bg-opacity': $store.state.temp.capturingScreenshot
-        ? 1
-        : $store.state.config.opacity,
       'font-family': $store.state.config.customFontFamily,
+      'background-color': $store.getters['config/backgroundColor'],
     }"
   >
     <title-bar />
