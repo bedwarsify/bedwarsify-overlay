@@ -154,15 +154,15 @@ export const columns: { [p: string]: ColumnDefinition } = {
     customDisplay: false,
     getDisplayValue: (player, modePrefix, options) => {
       if (player.user?.reportsSummary === 'SNIPER') {
-        return options?.shortTags ? '[S]' : '[SNIPER]'
+        return options?.shortTags ? '[S]' : '[SNIP]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
-        return options?.shortTags ? '[S?]' : '[SNIPER?]'
+        return options?.shortTags ? '[S?]' : '[SNIP?]'
       } else if (player.user?.reportsSummary === 'HACKER') {
-        return options?.shortTags ? '[H]' : '[HACKER]'
+        return options?.shortTags ? '[H]' : '[HACK]'
       } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
-        return options?.shortTags ? '[H?]' : '[HACKER?]'
+        return options?.shortTags ? '[H?]' : '[HACK?]'
       } else if (player.suspicious) {
-        return options?.shortTags ? '[S@]' : '[SNIPER@]'
+        return options?.shortTags ? '[S@]' : '[SNIP@]'
       } else if (player.user?.customTagText) {
         return `[${player.user?.customTagText}]`
       } else if (player.user?.role === Role.DEVELOPER) {
