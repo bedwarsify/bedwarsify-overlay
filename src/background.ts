@@ -24,6 +24,7 @@ import TailFile from '@logdna/tail-file'
 import readline from 'readline'
 import { autoUpdater } from 'electron-updater'
 import windowStateKeeper from 'electron-window-state'
+import debounce from 'lodash/debounce'
 
 const wait = (delay: number) =>
   new Promise((resolve) => {
@@ -67,6 +68,16 @@ async function createWindow() {
   winState.manage(win)
 
   win.setAlwaysOnTop(true, 'screen-saver')
+
+  win.on(
+    'resize',
+    debounce(() => winState.saveState(win!), 1000)
+  )
+
+  win.on(
+    'move',
+    debounce(() => winState.saveState(win!), 1000)
+  )
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
