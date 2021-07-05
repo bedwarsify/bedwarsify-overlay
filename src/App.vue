@@ -2,7 +2,7 @@
   <div
     class="w-screen h-screen text-white flex flex-col select-none p-px"
     :style="{
-      'font-family': $store.state.config.customFontFamily,
+      'font-family': $store.getters['config/fontFamily'],
       'background-color': $store.getters['config/backgroundColor'],
     }"
   >
@@ -62,8 +62,7 @@ export default Vue.extend({
       }
     },
     updateRootFontSize() {
-      document.documentElement.style.fontSize =
-        this.$store.state.config.customFontSize
+      document.documentElement.style.fontSize = `${this.$store.state.config.fontSize}px`
     },
     async registerGlobalShortcuts() {
       const shortcuts = [
@@ -101,7 +100,7 @@ export default Vue.extend({
         }
       }
     },
-    '$store.state.config.customFontSize'() {
+    '$store.state.config.fontSize'() {
       this.updateRootFontSize()
     },
     async '$store.state.config.keyboardShortcutMinimizeUnminize'() {

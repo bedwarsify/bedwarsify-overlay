@@ -489,6 +489,12 @@ export enum PlayerSource {
   PLAYERS = 'PLAYERS',
 }
 
+export enum FontFamilyPreset {
+  MINECRAFT = 'MINECRAFT',
+  SYSTEM_UI = 'SYSTEM_UI',
+  CUSTOM = 'CUSTOM',
+}
+
 const store = new Vuex.Store({
   modules: {
     config: {
@@ -542,8 +548,6 @@ const store = new Vuex.Store({
         autoReportSnipers: true,
         shortTags: false,
         missingPlayersWarning: true,
-        customFontFamily: 'Minecraft',
-        customFontSize: '16px',
         customBackgroundColor: '#18181b',
         columns: {
           0: Column.TAG,
@@ -567,6 +571,9 @@ const store = new Vuex.Store({
         } as {
           [p: number]: Column | null
         },
+        fontSize: 16,
+        fontFamilyPreset: FontFamilyPreset.MINECRAFT,
+        fontFamilyCustom: '',
       }),
       getters: {
         modePrefix: (state) =>
@@ -598,6 +605,15 @@ const store = new Vuex.Store({
             '--tw-bg-opacity': rootState.temp.capturingScreenshot
               ? 1
               : state.opacity,
+          }
+        },
+        fontFamily: (state) => {
+          if (state.fontFamilyPreset === FontFamilyPreset.MINECRAFT) {
+            return 'Minecraft'
+          } else if (state.fontFamilyPreset === FontFamilyPreset.SYSTEM_UI) {
+            return 'system-ui'
+          } else {
+            return state.fontFamilyCustom
           }
         },
       },

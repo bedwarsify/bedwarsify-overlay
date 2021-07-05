@@ -521,6 +521,98 @@
 
       <div>
         <div class="font-semibold mb-3 flex items-center space-x-1">
+          <span> Font </span>
+
+          <button @click="fontVisible = !fontVisible">
+            <svg
+              v-if="fontVisible"
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+
+            <svg
+              v-else
+              class="h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-2" v-if="fontVisible">
+          <div class="flex">
+            <div class="mr-2">Size:</div>
+
+            <input
+              type="number"
+              :value="$store.state.config.fontSize"
+              @change="
+                $store.commit('config/set', ['fontSize', $event.target.value])
+              "
+              class="bg-transparent border-b w-[3rem]"
+            />
+
+            px
+          </div>
+
+          <div class="flex">
+            <div class="mr-2">Family Preset:</div>
+
+            <select
+              class="bg-transparent"
+              :value="$store.state.config.fontFamilyPreset"
+              @change="
+                $store.commit('config/set', [
+                  'fontFamilyPreset',
+                  $event.target.value,
+                ])
+              "
+            >
+              <option value="MINECRAFT" class="bg-gray-900">Minecraft</option>
+
+              <option value="SYSTEM_UI" class="bg-gray-900">System UI</option>
+
+              <option value="CUSTOM" class="bg-gray-900">Custom</option>
+            </select>
+          </div>
+
+          <div
+            class="flex"
+            v-if="$store.state.config.fontFamilyPreset === 'CUSTOM'"
+          >
+            <div class="mr-2">Custom Family:</div>
+
+            <input
+              class="bg-transparent border-b flex-grow max-w-[8rem]"
+              :value="$store.state.config.fontFamilyCustom"
+              @change="
+                $store.commit('config/set', [
+                  'fontFamilyCustom',
+                  $event.target.value,
+                ])
+              "
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold mb-3 flex items-center space-x-1">
           <span> Advanced </span>
 
           <button @click="advancedVisible = !advancedVisible">
@@ -616,54 +708,6 @@
           </div>
 
           <div class="flex">
-            <div class="mr-2">Custom Font Family:</div>
-
-            <input
-              class="bg-transparent border-b flex-grow max-w-[12rem]"
-              :value="$store.state.config.customFontFamily"
-              @change="
-                $store.commit('config/set', [
-                  'customFontFamily',
-                  $event.target.value,
-                ])
-              "
-            />
-
-            <button
-              v-if="$store.state.config.customFontFamily !== 'system-ui'"
-              @click="
-                $store.commit('config/set', ['customFontFamily', 'system-ui'])
-              "
-              class="ml-2"
-            >
-              Reset
-            </button>
-          </div>
-
-          <div class="flex">
-            <div class="mr-2">Custom Font Size:</div>
-
-            <input
-              class="bg-transparent border-b flex-grow max-w-[8rem]"
-              :value="$store.state.config.customFontSize"
-              @change="
-                $store.commit('config/set', [
-                  'customFontSize',
-                  $event.target.value,
-                ])
-              "
-            />
-
-            <button
-              v-if="$store.state.config.customFontSize !== '16px'"
-              @click="$store.commit('config/set', ['customFontSize', '16px'])"
-              class="ml-2"
-            >
-              Reset
-            </button>
-          </div>
-
-          <div class="flex">
             <div class="mr-2">Custom Background Color:</div>
 
             <input
@@ -709,6 +753,7 @@ export default Vue.extend({
     return {
       columnsVisible: false,
       soundsVisible: false,
+      fontVisible: false,
       advancedVisible: false,
     }
   },
