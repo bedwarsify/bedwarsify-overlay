@@ -190,7 +190,7 @@ export default Vue.extend({
 
       if (this.$store.state.config.autoAddPlayers) {
         const joinMatch = message.match(
-          /^([A-Za-z0-9_]{3,16}) has joined \(([0-9]{1,2})\/[0-9]{1,2}\)!$/
+          /^([A-Za-z0-9_]{1,16}) has joined \(([0-9]{1,2})\/[0-9]{1,2}\)!$/
         )
 
         if (joinMatch !== null) {
@@ -205,7 +205,7 @@ export default Vue.extend({
         }
 
         const onlineMatch = message.match(
-          /^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{3,16}(?:, )?)+)$/
+          /^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)$/
         )
 
         if (onlineMatch !== null) {
@@ -230,7 +230,7 @@ export default Vue.extend({
           return
         }
 
-        const quitMatch = message.match(/^([A-Za-z0-9_]{3,16}) has quit!$/)
+        const quitMatch = message.match(/^([A-Za-z0-9_]{1,16}) has quit!$/)
 
         if (quitMatch !== null) {
           if (this.$store.state.temp.playersCount) {
@@ -257,7 +257,7 @@ export default Vue.extend({
       }
 
       const shoutMatch = message.match(
-        /^\[SHOUT] \[[A-Z]+] (?:\[[A-Z+]+] )?([A-Za-z0-9_]{3,16}): (.+)$/
+        /^\[SHOUT] \[[A-Z]+] (?:\[[A-Z+]+] )?([A-Za-z0-9_]{1,16}): (.+)$/
       )
 
       if (shoutMatch !== null) {
@@ -324,7 +324,7 @@ export default Vue.extend({
 
       if (this.$store.state.config.autoAddPartyMembers) {
         const leaderMatch = message.match(
-          /^Party Leader: (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{3,16})(?:.+)?$/
+          /^Party Leader: (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{1,16})(?:.+)?$/
         )
 
         if (leaderMatch !== null) {
@@ -337,7 +337,7 @@ export default Vue.extend({
         }
 
         const moderatorsMatch = message.match(
-          /^Party Moderators: ((?:(?:\[[A-Z+]+] )?[A-Za-z0-9_]{3,16}(?: \? )?)+) \? ?$/
+          /^Party Moderators: ((?:(?:\[[A-Z+]+] )?[A-Za-z0-9_]{1,16}(?: \? )?)+) \? ?$/
         )
 
         if (moderatorsMatch !== null) {
@@ -357,7 +357,7 @@ export default Vue.extend({
         }
 
         const membersMatch = message.match(
-          /^Party Members: ((?:(?:\[[A-Z+]+] )?[A-Za-z0-9_]{3,16}(?: \? )?)+) \? ?$/
+          /^Party Members: ((?:(?:\[[A-Z+]+] )?[A-Za-z0-9_]{1,16}(?: \? )?)+) \? ?$/
         )
 
         if (membersMatch !== null) {
@@ -377,7 +377,7 @@ export default Vue.extend({
         }
 
         const joinedLeaderMatch = message.match(
-          /^You have joined (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{3,16})'s party!$/
+          /^You have joined (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{1,16})'s party!$/
         )
 
         if (joinedLeaderMatch !== null) {
@@ -390,7 +390,7 @@ export default Vue.extend({
         }
 
         const joinedMembersMatch = message.match(
-          /^You'll be partying with: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{3,16}(?:, )?)+)(?:.+)?$/
+          /^You'll be partying with: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)(?:.+)?$/
         )
 
         if (joinedMembersMatch !== null) {
@@ -412,7 +412,7 @@ export default Vue.extend({
 
       if (this.$store.state.config.autoAddPartyRequests) {
         const incomingPartyRequestMatch = message.match(
-          /^(?:\[[A-Z+]+\] )?([A-Za-z0-9_]{3,16}) has invited you to join their party!$/
+          /^(?:\[[A-Z+]+\] )?([A-Za-z0-9_]{1,16}) has invited you to join their party!$/
         )
 
         if (incomingPartyRequestMatch !== null) {
@@ -425,7 +425,7 @@ export default Vue.extend({
         }
 
         const outgoingPartyRequestMatch = message.match(
-          /^(?:\[[A-Z+]+\] )?(?:[A-Za-z0-9_]{3,16}) invited (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{3,16}) to the party! They have 60 seconds to accept\.$/
+          /^(?:\[[A-Z+]+\] )?(?:[A-Za-z0-9_]{1,16}) invited (?:\[[A-Z+]+\] )?([A-Za-z0-9_]{1,16}) to the party! They have 60 seconds to accept\.$/
         )
 
         if (outgoingPartyRequestMatch !== null) {
@@ -440,7 +440,7 @@ export default Vue.extend({
 
       if (this.$store.state.config.autoAddFriendRequests) {
         const incomingFriendRequestMatch = message.match(
-          /^Friend request from (?:\[[A-Z+]+\] )([A-Za-z0-9_]{3,16})$/
+          /^Friend request from (?:\[[A-Z+]+\] )([A-Za-z0-9_]{1,16})$/
         )
 
         if (incomingFriendRequestMatch !== null) {
@@ -453,7 +453,7 @@ export default Vue.extend({
         }
 
         const outgoingFriendRequestMatch = message.match(
-          /^You sent a friend request to ([A-Za-z0-9_]{3,16})! They have 5 minutes to accept it!$/
+          /^You sent a friend request to ([A-Za-z0-9_]{1,16})! They have 5 minutes to accept it!$/
         )
 
         if (outgoingFriendRequestMatch !== null) {
@@ -468,7 +468,7 @@ export default Vue.extend({
 
       if (this.$store.state.config.autoAddLobbyChat) {
         const lobbyChatMatch = message.match(
-          /^[§�][0-9a-fk-r]\[[0-9]{1,4}.\] [§�][0-9a-fk-r](?:\[[A-Z+§�a-fk-r0-9]+\] )?([A-Za-z0-9_]{3,16})[§�][0-9a-fk-r]: .+$/
+          /^[§�][0-9a-fk-r]\[[0-9]{1,4}.\] [§�][0-9a-fk-r](?:\[[A-Z+§�a-fk-r0-9]+\] )?([A-Za-z0-9_]{1,16})[§�][0-9a-fk-r]: .+$/
         )
 
         if (lobbyChatMatch !== null) {
@@ -486,7 +486,7 @@ export default Vue.extend({
         this.$store.state.temp.name !== null
       ) {
         const mentionsMatch = message.match(
-          /^[§�][0-9a-fk-r]\[[0-9]{1,4}.\] [§�][0-9a-fk-r](?:\[[A-Z+§�a-fk-r0-9]+\] )?([A-Za-z0-9_]{3,16})[§�][0-9a-fk-r]: (.+)$/
+          /^[§�][0-9a-fk-r]\[[0-9]{1,4}.\] [§�][0-9a-fk-r](?:\[[A-Z+§�a-fk-r0-9]+\] )?([A-Za-z0-9_]{1,16})[§�][0-9a-fk-r]: (.+)$/
         )
 
         if (
@@ -505,7 +505,7 @@ export default Vue.extend({
       }
 
       const nickedMatch = message.match(
-        /^You are now nicked as ([A-Za-z0-9_]{3,16})!$/
+        /^You are now nicked as ([A-Za-z0-9_]{1,16})!$/
       )
 
       if (nickedMatch !== null && this.$store.state.temp.name) {
@@ -532,7 +532,7 @@ export default Vue.extend({
         }
 
         const addPlayerMatch = chatCommandMatch[1].match(
-          /\+([A-Za-z0-9_]{3,16})/
+          /\+([A-Za-z0-9_]{1,16})/
         )
 
         if (addPlayerMatch !== null) {

@@ -72,7 +72,7 @@ export default Vue.extend({
   },
   methods: {
     async addPlayer() {
-      if (!/^[A-Za-z0-9_]{3,16}$/.test(this.addPlayerName)) {
+      if (!/^[A-Za-z0-9_]{1,16}$/.test(this.addPlayerName)) {
         this.invalidAddPlayerName = true
         return
       }

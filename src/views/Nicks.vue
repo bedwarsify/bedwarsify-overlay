@@ -81,10 +81,10 @@ export default Vue.extend({
       return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        /^[A-Za-z0-9_]{3,16}$/.test(this.addNickNick) &&
+        /^[A-Za-z0-9_]{1,16}$/.test(this.addNickNick) &&
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        /^[A-Za-z0-9_]{3,16}$/.test(this.addNickName)
+        /^[A-Za-z0-9_]{1,16}$/.test(this.addNickName)
       )
     },
   },
