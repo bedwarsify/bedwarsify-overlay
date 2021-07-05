@@ -817,6 +817,12 @@ const store = new Vuex.Store({
           { commit, state, rootState },
           [name, apolloClient, source]
         ) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const nick: Nick | undefined = rootState.nicks.nicks.find(
+            (nick: Nick) => nick.nick.toLowerCase() === name.toLowerCase()
+          )
+
           if (
             state.players.find(
               (player: Player) =>
@@ -824,12 +830,6 @@ const store = new Vuex.Store({
             )
           )
             return
-
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          const nick: Nick | undefined = rootState.nicks.nicks.find(
-            (nick: Nick) => nick.nick.toLowerCase() === name.toLowerCase()
-          )
 
           if (nick) {
             name = nick.name

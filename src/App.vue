@@ -18,7 +18,7 @@ import Vue from 'vue'
 import gql from 'graphql-tag'
 import { record } from '@/db'
 import uuid from 'uuid'
-import { Player, PlayerSource } from '@/store'
+import { Nick, Player, PlayerSource } from '@/store'
 
 export default Vue.extend({
   data() {
@@ -240,7 +240,14 @@ export default Vue.extend({
             )
           }
 
-          await this.$store.commit('temp/removePlayerByName', quitMatch[1])
+          const nick = this.$store.state.nicks.nicks.find(
+            (nick: Nick) => nick.nick.toLowerCase() === quitMatch[1]
+          )?.name
+
+          await this.$store.commit(
+            'temp/removePlayerByName',
+            nick || quitMatch[1]
+          )
 
           return
         }
