@@ -156,10 +156,22 @@ export default Vue.extend({
       window.ipcRenderer.send('winClose')
     },
     async manualAddPlayer() {
-      this.$store.dispatch('temp/addPlayerName', [
-        this.manualAddPlayerName,
-        this.$apollo.getClient(),
-      ])
+      if (
+        !/^[A-Za-z0-9_]{1,16}(?:(?:\s+[A-Za-z0-9_]{1,16})+)?$/.test(
+          this.manualAddPlayerName
+        )
+      )
+        return
+
+      const playerNames = this.manualAddPlayerName.split(/\s+/)
+
+      for (const playerName of playerNames) {
+        this.$store.dispatch('temp/addPlayerName', [
+          playerName,
+          this.$apollo.getClient(),
+        ])
+      }
+
       this.manualAddPlayerName = ''
     },
   },
