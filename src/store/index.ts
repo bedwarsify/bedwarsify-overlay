@@ -539,6 +539,7 @@ const store = new Vuex.Store({
         autoAddMentions: true,
         autoRemoveAllOnServerChange: true,
         autoRemoveAllOnWho: true,
+        autoRemoveOnFinalDeath: false,
         sortBy: Column.INDEX as Column,
         sortAscending: false,
         keyboardShortcutMinimizeUnminize: '',

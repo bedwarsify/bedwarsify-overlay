@@ -308,6 +308,10 @@
                 label: 'All on /who:',
                 key: 'autoRemoveAllOnWho',
               },
+              {
+                label: 'On Final Death',
+                key: 'autoRemoveOnFinalDeath',
+              },
             ]"
             :key="entry.key"
           >

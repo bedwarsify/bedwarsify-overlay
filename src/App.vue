@@ -511,6 +511,31 @@ export default Vue.extend({
         }
       }
 
+      if (this.$store.state.config.autoRemoveOnFinalDeath) {
+        const finalDeathMatch = message.match(
+          /^([A-Za-z0-9_]{1,16}).+FINAL KILL!$/
+        )
+
+        if (finalDeathMatch) {
+          if (this.$store.state.temp.playersCount) {
+            this.$store.commit(
+              'temp/setPlayersCount',
+              this.$store.state.temp.playersCount - 1
+            )
+          }
+
+          const nick = this.$store.state.nicks.nicks.find(
+            (nick: Nick) =>
+              nick.nick.toLowerCase() === finalDeathMatch[1].toLowerCase()
+          )?.name
+
+          await this.$store.commit(
+            'temp/removePlayerByName',
+            nick || finalDeathMatch[1]
+          )
+        }
+      }
+
       const nickedMatch = message.match(
         /^You are now nicked as ([A-Za-z0-9_]{1,16})!$/
       )
