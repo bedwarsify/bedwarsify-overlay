@@ -20,7 +20,14 @@
                 <input
                   v-model.trim="manualAddPlayerName"
                   @keypress.enter="manualAddPlayer()"
-                  class="bg-transparent border px-1 w-full no-drag"
+                  class="
+                    bg-transparent
+                    border border-gray-400
+                    rounded-sm
+                    px-1
+                    w-full
+                    no-drag
+                  "
                 />
               </div>
 
