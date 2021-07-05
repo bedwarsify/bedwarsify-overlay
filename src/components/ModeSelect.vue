@@ -1,6 +1,6 @@
 <template>
   <div class="flex space-x-2 items-center">
-    <div>Mode:</div>
+    <div v-if="!noLabel">Mode:</div>
 
     <select
       class="bg-transparent"
@@ -46,3 +46,16 @@
     </select>
   </div>
 </template>
+
+<script lang="ts">
+import Vue, { PropType } from 'vue'
+
+export default Vue.extend({
+  props: {
+    noLabel: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+  },
+})
+</script>

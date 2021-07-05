@@ -1,40 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <div class="flex justify-between mb-4 p-2 space-x-6">
-      <div class="flex-grow min-w-[2rem] max-w-[16rem]">
-        <input
-          type="text"
-          class="bg-transparent border-b w-full"
-          v-model.trim="manualAddPlayerName"
-          @keypress.enter="manualAddPlayer()"
-        />
-      </div>
-
-      <div class="flex space-x-4">
-        <mode-select />
-
-        <button
-          @click="$store.commit('temp/clearPlayers')"
-          class="hover:text-gray-200"
-        >
-          Clear Players
-        </button>
-
-        <router-link to="/nicks" class="hover:text-gray-200">
-          Nicks
-        </router-link>
-
-        <router-link to="/tracking" class="hover:text-gray-200">
-          Tracking
-        </router-link>
-
-        <router-link to="/settings" class="hover:text-gray-200">
-          Settings
-        </router-link>
-      </div>
-    </div>
-
-    <div class="flex-grow p-2 pt-0">
+    <div class="flex-grow p-2 pt-0 mt-2">
       <table class="w-full table-auto text-center">
         <thead>
           <tr>
@@ -226,7 +192,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ModeSelect from '@/components/ModeSelect.vue'
 import {
   Column,
   columns,
@@ -240,7 +205,7 @@ import PlayerLevel from '@/components/PlayerLevel.vue'
 import ReportModal from '@/components/ReportModal.vue'
 
 export default Vue.extend({
-  components: { ReportModal, PlayerLevel, PlayerName, ModeSelect },
+  components: { ReportModal, PlayerLevel, PlayerName },
   data: () => ({
     manualAddPlayerName: '',
   }),
