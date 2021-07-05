@@ -14,7 +14,8 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
-      "vue-cli-plugin-apollo"
+      "vue-cli-plugin-apollo",
+      "lodash"
     ],
     "paths": {
       "@/*": [
