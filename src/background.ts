@@ -24,7 +24,6 @@ import TailFile from '@logdna/tail-file'
 import readline from 'readline'
 import { autoUpdater } from 'electron-updater'
 import windowStateKeeper from 'electron-window-state'
-import debounce from 'lodash/debounce'
 
 const wait = (delay: number) =>
   new Promise((resolve) => {
@@ -41,12 +40,12 @@ let win: BrowserWindow | null = null
 
 let discordAuthWin: BrowserWindow | null = null
 
-const winState = windowStateKeeper({
-  defaultWidth: 800,
-  defaultHeight: 600,
-})
-
 async function createWindow() {
+  const winState = windowStateKeeper({
+    defaultWidth: 800,
+    defaultHeight: 600,
+  })
+
   win = new BrowserWindow({
     width: winState.width,
     height: winState.height,
@@ -68,16 +67,6 @@ async function createWindow() {
   winState.manage(win)
 
   win.setAlwaysOnTop(true, 'screen-saver')
-
-  win.on(
-    'resize',
-    debounce(() => winState.saveState(win!), 1000)
-  )
-
-  win.on(
-    'move',
-    debounce(() => winState.saveState(win!), 1000)
-  )
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
