@@ -23,6 +23,8 @@
               >
                 <span>
                   {{
+                    ($store.state.config.superShortColumnDisplayNames &&
+                      columns[columnKey].superShortDisplayName) ||
                     columns[columnKey].shortDisplayName ||
                     columns[columnKey].displayName
                   }}
@@ -61,6 +63,8 @@
 
               <template v-else>
                 {{
+                  ($store.state.config.superShortColumnDisplayNames &&
+                    columns[columnKey].superShortDisplayName) ||
                   columns[columnKey].shortDisplayName ||
                   columns[columnKey].displayName
                 }}

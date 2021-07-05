@@ -697,6 +697,21 @@
           </div>
 
           <div class="flex items-center">
+            <div class="mr-2">Super Short Column Display Names:</div>
+
+            <input
+              type="checkbox"
+              :checked="$store.state.config.superShortColumnDisplayNames"
+              @change="
+                $store.commit('config/set', [
+                  'superShortColumnDisplayNames',
+                  !$store.state.config.superShortColumnDisplayNames,
+                ])
+              "
+            />
+          </div>
+
+          <div class="flex items-center">
             <div class="mr-2">Missing Players Warning:</div>
 
             <input

@@ -79,6 +79,7 @@ enum Color {
 type ColumnDefinition = {
   displayName: string
   shortDisplayName?: string
+  superShortDisplayName?: string
 } & (
   | {
       sort: Sort.NONE
@@ -130,6 +131,7 @@ type ColumnDefinition = {
 export const columns: { [p: string]: ColumnDefinition } = {
   [Column.NAME]: {
     displayName: 'Name',
+    superShortDisplayName: 'N',
     sort: Sort.ALPHABETICALLY,
     getSortValue: (player) => {
       return player.hypixelPlayer?.displayname || player.name
@@ -138,6 +140,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.LEVEL]: {
     displayName: 'Level',
+    superShortDisplayName: 'L',
     sort: Sort.VALUE,
     getSortValue: (player) => {
       return player.hypixelBedwarsLevelInfo?.level || 0
@@ -146,6 +149,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.TAG]: {
     displayName: 'Tag',
+    superShortDisplayName: 'T',
     sort: Sort.NONE,
     customDisplay: false,
     getDisplayValue: (player, modePrefix, options) => {
@@ -214,6 +218,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   [Column.NETWORK_LEVEL]: {
     displayName: 'Network Level',
     shortDisplayName: 'N. Level',
+    superShortDisplayName: 'NL',
     sort: Sort.VALUE,
     getSortValue: (player) => {
       return player.hypixelNetworkLevel?.level || 0
@@ -225,6 +230,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.INDEX]: {
     displayName: 'Index',
+    superShortDisplayName: 'I',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -264,6 +270,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   [Column.FINAL_KILLS]: {
     displayName: 'Final Kills',
     shortDisplayName: 'F. Kills',
+    superShortDisplayName: 'FK',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -280,6 +287,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   [Column.FINAL_DEATHS]: {
     displayName: 'Final Deaths',
     shortDisplayName: 'F. Deaths',
+    superShortDisplayName: 'FD',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -295,6 +303,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.FKDR]: {
     displayName: 'FKDR',
+    superShortDisplayName: 'FKD',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -313,6 +322,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.WINS]: {
     displayName: 'Wins',
+    superShortDisplayName: 'W',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -328,6 +338,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.LOSSES]: {
     displayName: 'Losses',
+    superShortDisplayName: 'L',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -343,6 +354,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.WLR]: {
     displayName: 'WLR',
+    superShortDisplayName: 'WL',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -362,6 +374,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   [Column.BEDS_BROKEN]: {
     displayName: 'Beds Broken',
     shortDisplayName: 'B. Broken',
+    superShortDisplayName: 'BB',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -378,6 +391,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   [Column.BEDS_LOST]: {
     displayName: 'Beds Lost',
     shortDisplayName: 'B. Lost',
+    superShortDisplayName: 'BL',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -392,7 +406,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     formatNumber: true,
   },
   [Column.BBLR]: {
-    displayName: 'BBLR',
+    displayName: 'BBL',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -411,6 +425,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.KILLS]: {
     displayName: 'Kills',
+    superShortDisplayName: 'K',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -426,6 +441,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.DEATHS]: {
     displayName: 'Deaths',
+    superShortDisplayName: 'D',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -441,6 +457,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
   },
   [Column.KDR]: {
     displayName: 'KDR',
+    superShortDisplayName: 'KD',
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
@@ -548,6 +565,7 @@ const store = new Vuex.Store({
         showHackersAndSnipersOnTop: true,
         autoReportSnipers: true,
         shortTags: false,
+        superShortColumnDisplayNames: false,
         missingPlayersWarning: true,
         customBackgroundColor: '#18181b',
         columns: {
