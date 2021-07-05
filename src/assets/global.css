@@ -1,3 +1,5 @@
+@import "./fonts/minecraft.css";
+
 button, input, select, option {
   @apply focus:outline-none;
 }

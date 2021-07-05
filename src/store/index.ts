@@ -542,7 +542,7 @@ const store = new Vuex.Store({
         autoReportSnipers: true,
         shortTags: false,
         missingPlayersWarning: true,
-        customFontFamily: 'system-ui',
+        customFontFamily: 'Minecraft',
         customFontSize: '16px',
         customBackgroundColor: '#18181b',
         columns: {
