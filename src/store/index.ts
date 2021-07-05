@@ -153,46 +153,39 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.NONE,
     customDisplay: false,
     getDisplayValue: (player, modePrefix, options) => {
-      if (player.user?.reportsSummary === 'SNIPER') {
-        return options?.shortTags ? '[S]' : '[SNIP]'
-      } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
-        return options?.shortTags ? '[S?]' : '[SNIP?]'
-      } else if (player.user?.reportsSummary === 'HACKER') {
-        return options?.shortTags ? '[H]' : '[HACK]'
-      } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
-        return options?.shortTags ? '[H?]' : '[HACK?]'
-      } else if (player.suspicious) {
-        return options?.shortTags ? '[S@]' : '[SNIP@]'
-      } else if (player.user?.customTagText) {
-        return `[${player.user?.customTagText}]`
+      const tags = []
+
+      if (player.user?.customTagText) {
+        tags.push(`[${player.user?.customTagText}]`)
       } else if (player.user?.role === Role.DEVELOPER) {
-        return '[DEV]'
+        tags.push('[DEV]')
       } else if (player.user?.role === Role.COMMUNITY_MANAGER) {
-        return '[CM]'
+        tags.push('[CM]')
       } else if (player.user?.role === Role.HELPER) {
-        return '[HLP]'
+        tags.push('[HLP]')
       } else if (player.user?.role === Role.PARTNER) {
-        return '[P]'
+        tags.push('[P]')
       } else if (player.user?.role === Role.NITRO_BOOSTER) {
-        return '[NB]'
-      } else {
-        return ''
+        tags.push('[NB]')
       }
+
+      if (player.user?.reportsSummary === 'SNIPER') {
+        tags.push(options?.shortTags ? '[S]' : '[SNIP]')
+      } else if (player.user?.reportsSummary === 'POTENTIAL_SNIPER') {
+        tags.push(options?.shortTags ? '[S?]' : '[SNIP?]')
+      } else if (player.user?.reportsSummary === 'HACKER') {
+        tags.push(options?.shortTags ? '[H]' : '[HACK]')
+      } else if (player.user?.reportsSummary === 'POTENTIAL_HACKER') {
+        tags.push(options?.shortTags ? '[H?]' : '[HACK?]')
+      } else if (player.suspicious) {
+        tags.push(options?.shortTags ? '[S@]' : '[SNIP@]')
+      }
+
+      return tags.join(' ')
     },
     color: Color.PROVIDED,
     getColor: (player) => {
-      if (
-        player.user?.reportsSummary === ReportsSummary.SNIPER ||
-        player.user?.reportsSummary === ReportsSummary.HACKER
-      ) {
-        return 0xb91c1c
-      } else if (
-        player.user?.reportsSummary === ReportsSummary.POTENTIAL_SNIPER ||
-        player.user?.reportsSummary === ReportsSummary.POTENTIAL_HACKER ||
-        player.suspicious
-      ) {
-        return 0xfca5a5
-      } else if (player.user?.customTagColor) {
+      if (player.user?.customTagColor) {
         return player.user.customTagColor
       } else if (player.user?.role === Role.DEVELOPER) {
         return 0x3b82f6
@@ -204,6 +197,17 @@ export const columns: { [p: string]: ColumnDefinition } = {
         return 0x22c55e
       } else if (player.user?.role === Role.NITRO_BOOSTER) {
         return 0xec4899
+      } else if (
+        player.user?.reportsSummary === ReportsSummary.SNIPER ||
+        player.user?.reportsSummary === ReportsSummary.HACKER
+      ) {
+        return 0xb91c1c
+      } else if (
+        player.user?.reportsSummary === ReportsSummary.POTENTIAL_SNIPER ||
+        player.user?.reportsSummary === ReportsSummary.POTENTIAL_HACKER ||
+        player.suspicious
+      ) {
+        return 0xfca5a5
       } else {
         return 0xffffff
       }
