@@ -1,5 +1,9 @@
 @import "./fonts/minecraft.css";
 
+* {
+  -webkit-user-drag: none;
+}
+
 button, input, select, option {
   @apply focus:outline-none;
 }
