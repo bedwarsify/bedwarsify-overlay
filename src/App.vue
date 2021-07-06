@@ -536,6 +536,75 @@ export default Vue.extend({
         }
       }
 
+      if (this.$store.state.config.autoAddReconnected) {
+        const reconnectedMatch = message.match(
+          /^([A-Za-z0-9_]{1,16}) reconnected$/
+        )
+
+        if (reconnectedMatch) {
+          const nick = this.$store.state.nicks.nicks.find(
+            (nick: Nick) =>
+              nick.nick.toLowerCase() === reconnectedMatch[1].toLowerCase()
+          )?.name
+
+          const name = nick || reconnectedMatch[1]
+
+          if (
+            this.$store.state.temp.players.find(
+              (player: Player) =>
+                player.name.toLowerCase() === name.toLowerCase()
+            )
+          )
+            return
+
+          if (this.$store.state.temp.playersCount) {
+            this.$store.commit(
+              'temp/setPlayersCount',
+              this.$store.state.temp.playersCount + 1
+            )
+          }
+
+          await this.$store.dispatch('temp/addPlayerName', [
+            name,
+            this.$apollo.getClient(),
+            PlayerSource.PLAYERS,
+          ])
+        }
+      }
+
+      if (this.$store.state.config.autoRemoveDisconnected) {
+        const disconnectedMatch = message.match(
+          /^([A-Za-z0-9_]{1,16}) disconnected$/
+        )
+
+        if (disconnectedMatch) {
+          const nick = this.$store.state.nicks.nicks.find(
+            (nick: Nick) =>
+              nick.nick.toLowerCase() === disconnectedMatch[1].toLowerCase()
+          )?.name
+
+          const name = nick || disconnectedMatch[1]
+
+          const existingPlayer = this.$store.state.temp.players.find(
+            (player: Player) => player.name.toLowerCase() === name.toLowerCase()
+          )
+
+          if (!existingPlayer) return
+
+          if (
+            this.$store.state.temp.playersCount &&
+            existingPlayer.source === PlayerSource.PLAYERS
+          ) {
+            this.$store.commit(
+              'temp/setPlayersCount',
+              this.$store.state.temp.playersCount - 1
+            )
+          }
+
+          this.$store.commit('temp/removePlayerByName', name)
+        }
+      }
+
       const nickedMatch = message.match(
         /^You are now nicked as ([A-Za-z0-9_]{1,16})!$/
       )

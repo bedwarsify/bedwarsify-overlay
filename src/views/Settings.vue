@@ -274,6 +274,10 @@
                 label: 'Chat Mentions:',
                 key: 'autoAddMentions',
               },
+              {
+                label: 'Reconnected',
+                key: 'autoAddReconnected',
+              },
             ]"
             :key="entry.key"
           >
@@ -311,6 +315,10 @@
               {
                 label: 'On Final Death',
                 key: 'autoRemoveOnFinalDeath',
+              },
+              {
+                label: 'Disconnected',
+                key: 'autoRemoveDisconnected',
               },
             ]"
             :key="entry.key"
