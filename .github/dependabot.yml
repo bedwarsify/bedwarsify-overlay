@@ -5,8 +5,6 @@ updates:
     directory: /
     schedule:
       interval: daily
-    assignees:
-      - jakubmeysner
     reviewers:
       - jakubmeysner
     commit-message:
