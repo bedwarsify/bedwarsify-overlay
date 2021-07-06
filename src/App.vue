@@ -517,22 +517,30 @@ export default Vue.extend({
         )
 
         if (finalDeathMatch) {
-          if (this.$store.state.temp.playersCount) {
+          const nick = this.$store.state.nicks.nicks.find(
+            (nick: Nick) =>
+              nick.nick.toLowerCase() === finalDeathMatch[1].toLowerCase()
+          )?.name
+
+          const name = nick || finalDeathMatch[1]
+
+          const existingPlayer = this.$store.state.temp.players.find(
+            (player: Player) => player.name.toLowerCase() === name.toLowerCase()
+          )
+
+          if (!existingPlayer) return
+
+          if (
+            this.$store.state.temp.playersCount &&
+            existingPlayer.source === PlayerSource.PLAYERS
+          ) {
             this.$store.commit(
               'temp/setPlayersCount',
               this.$store.state.temp.playersCount - 1
             )
           }
 
-          const nick = this.$store.state.nicks.nicks.find(
-            (nick: Nick) =>
-              nick.nick.toLowerCase() === finalDeathMatch[1].toLowerCase()
-          )?.name
-
-          await this.$store.commit(
-            'temp/removePlayerByName',
-            nick || finalDeathMatch[1]
-          )
+          await this.$store.commit('temp/removePlayerByName', name)
         }
       }
 
