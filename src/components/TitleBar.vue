@@ -23,12 +23,12 @@
                 @keypress.enter="manualAddPlayer()"
                 class="
                   bg-transparent
-                  border border-gray-400
-                  rounded-sm
+                  border border-2 border-gray-400
                   px-1
                   w-full
                   no-drag
                 "
+                :style="$store.getters['config/opacityStyle']"
               />
             </div>
 
