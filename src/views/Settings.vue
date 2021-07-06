@@ -753,6 +753,21 @@
               Reset
             </button>
           </div>
+
+          <div class="flex items-center">
+            <div class="mr-2">Text Shadow:</div>
+
+            <input
+              type="checkbox"
+              :checked="$store.state.config.textShadow"
+              @change="
+                $store.commit('config/set', [
+                  'textShadow',
+                  !$store.state.config.textShadow,
+                ])
+              "
+            />
+          </div>
         </div>
       </div>
     </div>

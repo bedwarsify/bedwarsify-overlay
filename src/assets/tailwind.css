@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  @variants responsive {
+    .text-shadow {
+      text-shadow: 0.1rem 0.1rem 0.2rem black;
+    }
+
+    .text-shadow-none {
+      text-shadow: none;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 <template>
   <div
     class="w-screen h-screen text-white flex flex-col select-none p-px"
+    :class="{ 'text-shadow': $store.state.config.textShadow }"
     :style="{
       'font-family': $store.getters['config/fontFamily'],
       'background-color': $store.getters['config/backgroundColor'],

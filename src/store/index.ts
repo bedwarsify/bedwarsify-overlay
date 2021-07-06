@@ -599,6 +599,7 @@ const store = new Vuex.Store({
         fontSize: 16,
         fontFamilyPreset: FontFamilyPreset.MINECRAFT,
         fontFamilyCustom: '',
+        textShadow: true,
       }),
       getters: {
         modePrefix: (state) =>
