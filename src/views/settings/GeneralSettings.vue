@@ -338,6 +338,51 @@
         </button>
       </div>
     </div>
+
+    <div
+      class="flex justify-between p-3 items-center hover:bg-gray-800"
+      :style="$store.getters['config/opacityStyle']"
+    >
+      <div class="text-lg">Guild Tags</div>
+
+      <div class="flex flex-grow items-center justify-end">
+        <button
+          @click="
+            $store.commit('config/set', [
+              'showGuildTag',
+              !$store.state.config.showGuildTag,
+            ])
+          "
+          class="border border-2 p-1 hover:bg-gray-700"
+        >
+          <svg
+            v-if="$store.state.config['showGuildTag']"
+            class="w-6 h-6 text-green-400"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M18 6h2v2h-2V6zm-2 4V8h2v2h-2zm-2 2v-2h2v2h-2zm-2 2h2v-2h-2v2zm-2 2h2v-2h-2v2zm-2 0v2h2v-2H8zm-2-2h2v2H6v-2zm0 0H4v-2h2v2z"
+              fill="currentColor"
+            />
+          </svg>
+
+          <svg
+            v-else
+            class="w-6 h-6 text-red-400"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M5 5h2v2H5V5zm4 4H7V7h2v2zm2 2H9V9h2v2zm2 0h-2v2H9v2H7v2H5v2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h-2v-2h-2v-2h-2v-2zm2-2v2h-2V9h2zm2-2v2h-2V7h2zm0 0V5h2v2h-2z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
