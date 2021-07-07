@@ -269,6 +269,10 @@ export default Vue.extend({
               ]).has(b.user?.reportsSummary)
             ) {
               return -1
+            } else if (b.suspicious && !a.suspicious) {
+              return 1
+            } else if (a.suspicious && !b.suspicious) {
+              return -1
             }
           }
 
