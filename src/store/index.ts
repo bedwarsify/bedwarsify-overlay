@@ -516,6 +516,120 @@ export enum FontFamilyPreset {
   CUSTOM = 'CUSTOM',
 }
 
+export enum Mode {
+  OVERALL = 'OVERALL',
+  EIGHT_ONE = 'EIGHT_ONE',
+  EIGHT_TWO = 'EIGHT_TWO',
+  FOUR_THREE = 'FOUR_THREE',
+  FOUR_FOUR = 'FOUR_FOUR',
+  TWO_FOUR = 'TWO_FOUR',
+  EIGHT_TWO_RUSH = 'EIGHT_TWO_RUSH',
+  FOUR_FOUR_RUSH = 'FOUR_FOUR_RUSH',
+  EIGHT_TWO_ULTIMATE = 'EIGHT_TWO_ULTIMATE',
+  FOUR_FOUR_ULTIMATE = 'FOUR_FOUR_ULTIMATE',
+  CASTLE = 'CASTLE',
+  EIGHT_TWO_VOIDLESS = 'EIGHT_TWO_VOIDLESS',
+  FOUR_FOUR_VOIDLESS = 'FOUR_FOUR_VOIDLESS',
+  EIGHT_TWO_ARMED = 'EIGHT_TWO_ARMED',
+  FOUR_FOUR_ARMED = 'FOUR_FOUR_ARMED',
+  EIGHT_TWO_LUCKY = 'EIGHT_TWO_LUCKY',
+  FOUR_FOUR_LUCKY = 'FOUR_FOUR_LUCKY',
+}
+
+export interface ModeDefinition {
+  displayName: string
+  dream?: boolean
+}
+
+export const modes: { [p: string]: ModeDefinition } = {
+  [Mode.OVERALL]: {
+    displayName: 'Overall',
+  },
+  [Mode.EIGHT_ONE]: {
+    displayName: 'Solo',
+  },
+  [Mode.EIGHT_TWO]: {
+    displayName: 'Doubles',
+  },
+  [Mode.FOUR_THREE]: {
+    displayName: '3v3v3v3',
+  },
+  [Mode.FOUR_FOUR]: {
+    displayName: '4v4v4v4',
+  },
+  [Mode.TWO_FOUR]: {
+    displayName: '4v4',
+  },
+  [Mode.EIGHT_TWO_RUSH]: {
+    displayName: 'Rush Doubles',
+    dream: true,
+  },
+  [Mode.FOUR_FOUR_RUSH]: {
+    displayName: 'Rush 4v4v4v4',
+    dream: true,
+  },
+  [Mode.EIGHT_TWO_ULTIMATE]: {
+    displayName: 'Ultimate Doubles',
+    dream: true,
+  },
+  [Mode.FOUR_FOUR_ULTIMATE]: {
+    displayName: 'Ultimate 4v4v4v4',
+    dream: true,
+  },
+  [Mode.CASTLE]: {
+    displayName: 'Castle',
+    dream: true,
+  },
+  [Mode.EIGHT_TWO_VOIDLESS]: {
+    displayName: 'Voidless Doubles',
+    dream: true,
+  },
+  [Mode.FOUR_FOUR_VOIDLESS]: {
+    displayName: 'Voidless 4v4v4v4',
+    dream: true,
+  },
+  [Mode.EIGHT_TWO_ARMED]: {
+    displayName: 'Armed Doubles',
+    dream: true,
+  },
+  [Mode.FOUR_FOUR_ARMED]: {
+    displayName: 'Armed 4v4v4v4',
+    dream: true,
+  },
+  [Mode.EIGHT_TWO_LUCKY]: {
+    displayName: 'Lucky Blocks Doubles',
+    dream: true,
+  },
+  [Mode.FOUR_FOUR_LUCKY]: {
+    displayName: 'Lucky Blocks 4v4v4v4',
+    dream: true,
+  },
+}
+
+enum TextShadow {
+  ENABLED = 'ENABLED',
+  PLAYERS_ONLY = 'PLAYERS_ONLY',
+  DISABLED = 'DISABLED',
+}
+
+enum ColumnLabels {
+  NORMAL = 'NORMAL',
+  SHORT = 'SHORT',
+  DISABLED = 'DISABLED',
+}
+
+export const defaultColumns = [
+  Column.TAG,
+  Column.LEVEL,
+  Column.NAME,
+  Column.WIN_STREAK,
+  Column.FKDR,
+  Column.WLR,
+  Column.FINAL_KILLS,
+  Column.WINS,
+  Column.INDEX,
+]
+
 const store = new Vuex.Store({
   modules: {
     config: {
@@ -523,24 +637,7 @@ const store = new Vuex.Store({
         apiKey: '',
         setApiKeyFromCmd: true,
         opacity: 0.5,
-        mode: 'OVERALL' as
-          | 'OVERALL'
-          | 'EIGHT_ONE'
-          | 'EIGHT_TWO'
-          | 'FOUR_THREE'
-          | 'FOUR_FOUR'
-          | 'TWO_FOUR'
-          | 'EIGHT_TWO_RUSH'
-          | 'FOUR_FOUR_RUSH'
-          | 'EIGHT_TWO_ULTIMATE'
-          | 'FOUR_FOUR_ULTIMATE'
-          | 'CASTLE'
-          | 'EIGHT_TWO_VOIDLESS'
-          | 'FOUR_FOUR_VOIDLESS'
-          | 'EIGHT_TWO_ARMED'
-          | 'FOUR_FOUR_ARMED'
-          | 'EIGHT_TWO_LUCKY'
-          | 'FOUR_FOUR_LUCKY',
+        mode: Mode.OVERALL,
         showDreamModes: false,
         showGuildTag: false,
         logFileFormat: 'STANDARD' as 'STANDARD' | 'LUNAR_CLIENT' | 'LABYMOD',
@@ -568,38 +665,17 @@ const store = new Vuex.Store({
         keyboardShortcutMinimizeUnminize: '',
         keyboardShortcutClearPlayers: '',
         hackersSnipersSoundEffect: null as SoundEffect | null,
-        showHackersAndSnipersOnTop: true,
         autoReportSnipers: true,
         shortTags: false,
         superShortColumnDisplayNames: false,
         missingPlayersWarning: true,
         customBackgroundColor: '#18181b',
-        columns: {
-          0: Column.TAG,
-          1: Column.LEVEL,
-          2: Column.NAME,
-          3: Column.WIN_STREAK,
-          4: Column.FKDR,
-          5: Column.WLR,
-          6: Column.FINAL_KILLS,
-          7: Column.WINS,
-          8: Column.INDEX,
-          9: null,
-          10: null,
-          11: null,
-          12: null,
-          13: null,
-          14: null,
-          15: null,
-          16: null,
-          17: null,
-        } as {
-          [p: number]: Column | null
-        },
+        columns: defaultColumns as (Column | null)[],
         fontSize: 16,
         fontFamilyPreset: FontFamilyPreset.MINECRAFT,
         fontFamilyCustom: '',
-        textShadow: true,
+        textShadow: TextShadow.PLAYERS_ONLY,
+        columnLabels: ColumnLabels.NORMAL,
       }),
       getters: {
         modePrefix: (state) =>
@@ -649,6 +725,18 @@ const store = new Vuex.Store({
         },
         setColumn(state, [i, newColumn]: [number, Column]) {
           state.columns[i] = newColumn
+        },
+        addColumnStart(state) {
+          state.columns = [null, ...state.columns]
+        },
+        removeColumnStart(state) {
+          state.columns = state.columns.slice(1)
+        },
+        addColumnEnd(state) {
+          state.columns = [...state.columns, null]
+        },
+        removeColumnEnd(state) {
+          state.columns = state.columns.slice(0, -1)
         },
       },
       actions: {

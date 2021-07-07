@@ -1,8 +1,13 @@
 <template>
-  <div class="w-full h-full flex flex-col">
+  <div
+    class="w-full h-full flex flex-col"
+    :class="{
+      'text-shadow': $store.state.config.textShadow === 'PLAYERS_ONLY',
+    }"
+  >
     <div class="flex-grow p-2 pt-0 mt-2">
       <table class="w-full table-auto text-center">
-        <thead>
+        <thead v-if="$store.state.config.columnLabels !== 'DISABLED'">
           <tr>
             <th
               v-for="columnKey in $store.getters['config/activeColumns']"
@@ -23,7 +28,7 @@
               >
                 <span>
                   {{
-                    ($store.state.config.superShortColumnDisplayNames &&
+                    ($store.state.config.columnLabels === 'SHORT' &&
                       columns[columnKey].superShortDisplayName) ||
                     columns[columnKey].shortDisplayName ||
                     columns[columnKey].displayName
@@ -61,7 +66,7 @@
 
               <template v-else>
                 {{
-                  ($store.state.config.superShortColumnDisplayNames &&
+                  ($store.state.config.columnLabels === 'SHORT' &&
                     columns[columnKey].superShortDisplayName) ||
                   columns[columnKey].shortDisplayName ||
                   columns[columnKey].displayName
@@ -228,52 +233,50 @@ export default Vue.extend({
         } else if (a.hypixelPlayer && !b.hypixelPlayer) {
           return -1
         } else if (a.hypixelPlayer && b.hypixelPlayer) {
-          if (this.$store.state.config.showHackersAndSnipersOnTop) {
-            if (
-              new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
-                b.user?.reportsSummary
-              ) &&
-              !new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
-                a.user?.reportsSummary
-              )
-            ) {
-              return 1
-            } else if (
-              new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
-                a.user?.reportsSummary
-              ) &&
-              !new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
-                b.user?.reportsSummary
-              )
-            ) {
-              return -1
-            } else if (
-              new Set([
-                ReportsSummary.POTENTIAL_HACKER,
-                ReportsSummary.POTENTIAL_SNIPER,
-              ]).has(b.user?.reportsSummary) &&
-              !new Set([
-                ReportsSummary.POTENTIAL_HACKER,
-                ReportsSummary.POTENTIAL_SNIPER,
-              ]).has(a.user?.reportsSummary)
-            ) {
-              return 1
-            } else if (
-              new Set([
-                ReportsSummary.POTENTIAL_HACKER,
-                ReportsSummary.POTENTIAL_SNIPER,
-              ]).has(a.user?.reportsSummary) &&
-              !new Set([
-                ReportsSummary.POTENTIAL_HACKER,
-                ReportsSummary.POTENTIAL_SNIPER,
-              ]).has(b.user?.reportsSummary)
-            ) {
-              return -1
-            } else if (b.suspicious && !a.suspicious) {
-              return 1
-            } else if (a.suspicious && !b.suspicious) {
-              return -1
-            }
+          if (
+            new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
+              b.user?.reportsSummary
+            ) &&
+            !new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
+              a.user?.reportsSummary
+            )
+          ) {
+            return 1
+          } else if (
+            new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
+              a.user?.reportsSummary
+            ) &&
+            !new Set([ReportsSummary.HACKER, ReportsSummary.SNIPER]).has(
+              b.user?.reportsSummary
+            )
+          ) {
+            return -1
+          } else if (
+            new Set([
+              ReportsSummary.POTENTIAL_HACKER,
+              ReportsSummary.POTENTIAL_SNIPER,
+            ]).has(b.user?.reportsSummary) &&
+            !new Set([
+              ReportsSummary.POTENTIAL_HACKER,
+              ReportsSummary.POTENTIAL_SNIPER,
+            ]).has(a.user?.reportsSummary)
+          ) {
+            return 1
+          } else if (
+            new Set([
+              ReportsSummary.POTENTIAL_HACKER,
+              ReportsSummary.POTENTIAL_SNIPER,
+            ]).has(a.user?.reportsSummary) &&
+            !new Set([
+              ReportsSummary.POTENTIAL_HACKER,
+              ReportsSummary.POTENTIAL_SNIPER,
+            ]).has(b.user?.reportsSummary)
+          ) {
+            return -1
+          } else if (b.suspicious && !a.suspicious) {
+            return 1
+          } else if (a.suspicious && !b.suspicious) {
+            return -1
           }
 
           const sortColumn = columns[this.$store.state.config.sortBy]

@@ -40,11 +40,11 @@
           v-if="!$store.state.temp.logFilePathReadable"
           class="text-red-600 font-semibold"
         >
-          Log file path invalid!
+          Log File Invalid!
         </div>
 
         <div class="flex flex-col space-y-2 items-center">
-          <router-link to="/settings" class="hover:text-gray-200">
+          <router-link to="/settings/general" class="hover:text-gray-200">
             Go To Settings
           </router-link>
 

@@ -1,7 +1,7 @@
 <template>
   <div
     class="w-screen h-screen text-white flex flex-col select-none p-px"
-    :class="{ 'text-shadow': $store.state.config.textShadow }"
+    :class="{ 'text-shadow': $store.state.config.textShadow === 'ENABLED' }"
     :style="{
       'font-family': $store.getters['config/fontFamily'],
       'background-color': $store.getters['config/backgroundColor'],
@@ -157,7 +157,7 @@ export default Vue.extend({
         LUNAR_CLIENT:
           /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[(?:(?:Client thread)|(?:main))\/INFO\]: \[CHAT\] (.+)$/,
         LABYMOD:
-          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}] \[(?:(?:Client thread)|(?:main))\/INFO] \[net\.labymod\.core_implementation\.mc18\.gui\.GuiChatAdapter\/]: \[CHAT] (.+)$/,
+          /^\[[0-9]{2}:[0-9]{2}:[0-9]{2}\] \[(?:(?:Client thread)|(?:main))\/INFO\]: \[CHAT\] (.+)$/,
       }[
         this.$store.state.config.logFileFormat as
           | 'STANDARD'

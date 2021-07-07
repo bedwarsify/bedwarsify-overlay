@@ -34,6 +34,12 @@ module.exports = {
           'dark-gray': '#555555',
           black: '#000000',
         },
+        discord: {
+          blurple: '#5865f2',
+        },
+        patreon: {
+          'fiery-coral': '#ff424d',
+        },
       },
     },
   },
