@@ -123,6 +123,7 @@ export default Vue.extend({
   async mounted() {
     this.updateRootFontSize()
     this.registerGlobalShortcuts()
+    this.updateApiKeyValid()
 
     for (const player of this.$store.state.tracking.players) {
       if (player.autoRecord.onLaunch) {
@@ -140,9 +141,13 @@ export default Vue.extend({
 
     if (this.$store.state.config.logFilePath === '') {
       await this.$store.dispatch('config/setLogFilePathFromPreset', 'STANDARD')
+    } else {
+      await this.$store.dispatch(
+        'config/setLogFilePathFromPreset',
+        this.$store.state.config.logFilePathPreset
+      )
     }
 
-    await this.updateApiKeyValid()
     await this.updateLogFilePathReadable()
     await this.$store.dispatch('temp/updateName', this.$apollo.getClient())
 
