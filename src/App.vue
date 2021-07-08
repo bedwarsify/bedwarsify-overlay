@@ -32,6 +32,15 @@ export default Vue.extend({
     async updateApiKeyValid() {
       this.$store.commit('temp/setApiKeyValid', null)
 
+      if (
+        !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(
+          this.$store.state.config.apiKey
+        )
+      ) {
+        this.$store.commit('temp/setApiKeyValid', false)
+        return
+      }
+
       try {
         await window.ipcRenderer.invoke(
           'hypixel',

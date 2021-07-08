@@ -149,7 +149,7 @@
             max-w-[14rem]
           "
           :value="$store.state.config.apiKey"
-          @change="$store.commit('config/set', ['apiKey', $event.target.value])"
+          @input="$store.commit('config/set', ['apiKey', $event.target.value])"
         />
       </div>
     </div>
@@ -456,6 +456,7 @@
 import Vue from 'vue'
 import { onLogout } from '@/vue-apollo'
 import { columns, modes } from '@/store'
+import debounce from 'lodash/debounce'
 
 export default Vue.extend({
   data() {
