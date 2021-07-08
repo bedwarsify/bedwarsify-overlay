@@ -77,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import Players from '@/components/Players.vue'
+import Players from '@/views/Players.vue'
 
 export default {
   components: { Players },
