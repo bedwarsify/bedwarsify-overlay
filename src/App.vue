@@ -424,10 +424,10 @@ export default Vue.extend({
         )
 
         if (incomingPartyRequestMatch !== null) {
-          await this.$store.dispatch(
-            'temp/addPlayerName',
-            incomingPartyRequestMatch[1]
-          )
+          await this.$store.dispatch('temp/addPlayerName', [
+            incomingPartyRequestMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -437,10 +437,10 @@ export default Vue.extend({
         )
 
         if (outgoingPartyRequestMatch !== null) {
-          await this.$store.dispatch(
-            'temp/addPlayerName',
-            outgoingPartyRequestMatch[1]
-          )
+          await this.$store.dispatch('temp/addPlayerName', [
+            outgoingPartyRequestMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -452,10 +452,10 @@ export default Vue.extend({
         )
 
         if (incomingFriendRequestMatch !== null) {
-          await this.$store.dispatch(
-            'temp/addPlayerName',
-            incomingFriendRequestMatch[1]
-          )
+          await this.$store.dispatch('temp/addPlayerName', [
+            incomingFriendRequestMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -465,10 +465,10 @@ export default Vue.extend({
         )
 
         if (outgoingFriendRequestMatch !== null) {
-          await this.$store.dispatch(
-            'temp/addPlayerName',
-            outgoingFriendRequestMatch[1]
-          )
+          await this.$store.dispatch('temp/addPlayerName', [
+            outgoingFriendRequestMatch[1],
+            this.$apollo.getClient(),
+          ])
 
           return
         }
@@ -646,7 +646,7 @@ export default Vue.extend({
         )
 
         if (addPlayerMatch !== null) {
-          this.$store.dispatch('temp/addPlayerName', [
+          await this.$store.dispatch('temp/addPlayerName', [
             addPlayerMatch[1],
             this.$apollo.getClient(),
           ])
