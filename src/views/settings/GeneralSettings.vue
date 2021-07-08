@@ -97,7 +97,45 @@
     >
       <div class="text-lg">API Key</div>
 
-      <div class="flex flex-grow items-center justify-end">
+      <div class="flex flex-grow items-center justify-end space-x-3">
+        <div
+          v-if="$store.state.temp.apiKeyValid"
+          class="flex justify-center items-center space-x-1 text-green-400"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M18 6h2v2h-2V6zm-2 4V8h2v2h-2zm-2 2v-2h2v2h-2zm-2 2h2v-2h-2v2zm-2 2h2v-2h-2v2zm-2 0v2h2v-2H8zm-2-2h2v2H6v-2zm0 0H4v-2h2v2z"
+              fill="currentColor"
+            />
+          </svg>
+
+          <div>Valid</div>
+        </div>
+
+        <div
+          v-else-if="$store.state.temp.apiKeyValid === false"
+          class="flex flex-grow items-center justify-end space-x-1 text-red-400"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M5 5h2v2H5V5zm4 4H7V7h2v2zm2 2H9V9h2v2zm2 0h-2v2H9v2H7v2H5v2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h-2v-2h-2v-2h-2v-2zm2-2v2h-2V9h2zm2-2v2h-2V7h2zm0 0V5h2v2h-2z"
+              fill="currentColor"
+            />
+          </svg>
+
+          <div>Invalid</div>
+        </div>
+
         <input
           type="password"
           class="
