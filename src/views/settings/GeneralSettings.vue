@@ -21,29 +21,35 @@
     </div>
 
     <div
-      class="flex justify-between p-3 items-center hover:bg-gray-800"
+      class="flex p-3 items-center hover:bg-gray-800"
       :style="$store.getters['config/opacityStyle']"
     >
-      <div class="text-lg">Account</div>
-
-      <div class="flex items-center">
-        <apollo-query
-          :query="
-            (gql) => gql`
-              query {
-                session {
+      <apollo-query
+        :query="
+          (gql) => gql`
+            query {
+              session {
+                id
+                user {
                   id
-                  user {
-                    id
-                    minecraftId
-                  }
+                  minecraftId
                 }
               }
-            `
-          "
-          class="flex items-center space-x-4"
-        >
-          <template v-slot="{ result: { loading, error, data } }">
+            }
+          `
+        "
+        class="flex flex-grow justify-between items-center"
+      >
+        <template v-slot="{ result: { loading, error, data } }">
+          <div>
+            <div class="text-lg">Account</div>
+
+            <div v-if="data && !data.session" class="text-sm text-red-300">
+              You must log in to see hacker and sniper tags!
+            </div>
+          </div>
+
+          <div class="flex justify-end items-center space-x-4">
             <template v-if="data">
               <template v-if="data.session">
                 <div class="flex items-center space-x-3">
@@ -80,9 +86,9 @@
                 </router-link>
               </template>
             </template>
-          </template>
-        </apollo-query>
-      </div>
+          </div>
+        </template>
+      </apollo-query>
     </div>
 
     <div

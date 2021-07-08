@@ -16,6 +16,8 @@ module.exports = {
       colors: {
         gray: colors.gray,
         cyan: colors.cyan,
+        amber: colors.amber,
+        orange: colors.orange,
         minecraft: {
           'dark-red': '#aa0000',
           red: '#ff5555',
