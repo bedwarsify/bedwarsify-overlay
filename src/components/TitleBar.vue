@@ -15,7 +15,11 @@
       >
         <div class="flex flex-grow items-center justify-end ml-3 mr-2">
           <template
-            v-if="$store.state.temp.apiKeyValid && $route.name === 'Home'"
+            v-if="
+              $store.state.temp.apiKeyValid &&
+              $store.state.temp.launchSettingsVisible === false &&
+              $route.name === 'Home'
+            "
           >
             <div class="flex-grow max-w-[10rem]">
               <input
@@ -104,7 +108,12 @@
                 <div class="leading-none">Home</div>
               </router-link>
 
-              <template v-if="$store.state.temp.apiKeyValid">
+              <template
+                v-if="
+                  $store.state.temp.apiKeyValid &&
+                  $store.state.temp.launchSettingsVisible === false
+                "
+              >
                 <router-link
                   to="/nicks"
                   class="

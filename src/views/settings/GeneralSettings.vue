@@ -220,6 +220,7 @@
           <option value="STANDARD">Standard</option>
           <option value="LUNAR_CLIENT">Lunar Client</option>
           <option value="BADLION_CLIENT">Badlion Client</option>
+          <option value="PVPLOUNGE">PvPLounge</option>
           <option value="CUSTOM">Custom</option>
         </select>
 
@@ -456,7 +457,6 @@
 import Vue from 'vue'
 import { onLogout } from '@/vue-apollo'
 import { columns, modes } from '@/store'
-import debounce from 'lodash/debounce'
 
 export default Vue.extend({
   data() {

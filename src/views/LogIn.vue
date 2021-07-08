@@ -12,9 +12,7 @@
         Try Again
       </button>
 
-      <router-link to="/settings/general" class="hover:text-gray-200">
-        Back
-      </router-link>
+      <button @click="$router.go(-1)" class="hover:text-gray-200">Back</button>
     </div>
 
     <div
@@ -39,9 +37,7 @@
         Try Again
       </button>
 
-      <router-link to="/settings/general" class="hover:text-gray-200">
-        Back
-      </router-link>
+      <button @click="$router.go(-1)" class="hover:text-gray-200">Back</button>
     </div>
   </div>
 </template>
@@ -109,7 +105,7 @@ export default Vue.extend({
             'temp/updateName',
             this.$apollo.getClient()
           )
-          await this.$router.push({ path: '/settings/general' })
+          await this.$router.go(-1)
         } catch (error) {
           if (
             error.message ===

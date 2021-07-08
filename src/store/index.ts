@@ -741,7 +741,7 @@ const store = new Vuex.Store({
       },
       actions: {
         async setLogFilePathFromPreset(
-          { commit, state },
+          { commit },
           preset:
             | 'STANDARD'
             | 'LUNAR_CLIENT'
@@ -750,7 +750,7 @@ const store = new Vuex.Store({
             | 'PVPLOUNGE'
             | 'CUSTOM'
         ) {
-          state.logFilePathPreset = preset
+          commit('set', ['logFilePathPreset', preset])
 
           if (preset === 'STANDARD') {
             commit('set', [
@@ -888,6 +888,7 @@ const store = new Vuex.Store({
         lastMessageServerChange: false,
         capturingScreenshot: false,
         playersCount: null as number | null,
+        launchSettingsVisible: null as boolean | null,
       }),
       mutations: {
         setApiKeyValid(state, newValue) {
@@ -924,6 +925,9 @@ const store = new Vuex.Store({
         },
         setPlayersCount(state, newValue: number | null) {
           state.playersCount = newValue
+        },
+        setLaunchSettingsVisible(state, newValue: boolean | null) {
+          state.launchSettingsVisible = newValue
         },
       },
       actions: {

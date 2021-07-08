@@ -38,19 +38,22 @@ export default Vue.extend({
         )
       ) {
         this.$store.commit('temp/setApiKeyValid', false)
-        return
+      } else {
+        try {
+          await window.ipcRenderer.invoke(
+            'hypixel',
+            this.$store.state.config.apiKey,
+            'key'
+          )
+
+          this.$store.commit('temp/setApiKeyValid', true)
+        } catch (error) {
+          this.$store.commit('temp/setApiKeyValid', false)
+        }
       }
 
-      try {
-        await window.ipcRenderer.invoke(
-          'hypixel',
-          this.$store.state.config.apiKey,
-          'key'
-        )
-
-        this.$store.commit('temp/setApiKeyValid', true)
-      } catch (error) {
-        this.$store.commit('temp/setApiKeyValid', false)
+      if (!this.$store.state.temp.apiKeyValid) {
+        this.$store.commit('temp/setLaunchSettingsVisible', true)
       }
     },
     async updateLogFilePathReadable() {
@@ -123,7 +126,7 @@ export default Vue.extend({
   async mounted() {
     this.updateRootFontSize()
     this.registerGlobalShortcuts()
-    this.updateApiKeyValid()
+    await this.updateApiKeyValid()
 
     for (const player of this.$store.state.tracking.players) {
       if (player.autoRecord.onLaunch) {
@@ -149,6 +152,16 @@ export default Vue.extend({
     }
 
     await this.updateLogFilePathReadable()
+
+    if (
+      this.$store.state.temp.apiKeyValid &&
+      this.$store.state.temp.logFilePathReadable
+    ) {
+      this.$store.commit('temp/setLaunchSettingsVisible', false)
+    } else {
+      this.$store.commit('temp/setLaunchSettingsVisible', true)
+    }
+
     await this.$store.dispatch('temp/updateName', this.$apollo.getClient())
 
     window.ipcRenderer.on('logFileLine', async (event, line: string) => {
