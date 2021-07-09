@@ -278,10 +278,14 @@
         @click="$store.commit('temp/setLaunchSettingsVisible', false)"
         class="border border-2 py-1 px-3 hover:bg-gray-700"
         :class="{
-          'border-red-500': !$store.state.temp.apiKeyValid,
-          'text-red-500': !$store.state.temp.apiKeyValid,
-          'border-amber-500': !$store.state.temp.logFilePathReadable,
-          'text-amber-500': !$store.state.temp.logFilePathReadable,
+          'border-red-500': $store.state.temp.apiKeyValid === false,
+          'text-red-500': $store.state.temp.apiKeyValid === false,
+          'border-amber-500':
+            $store.state.temp.apiKeyValid &&
+            !$store.state.temp.logFilePathReadable,
+          'text-amber-500':
+            $store.state.temp.apiKeyValid &&
+            !$store.state.temp.logFilePathReadable,
         }"
         :disabled="!$store.state.temp.apiKeyValid"
       >
