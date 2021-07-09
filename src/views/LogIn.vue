@@ -1,56 +1,81 @@
 <template>
-  <div class="p-2 flex justify-center items-center">
-    <div v-if="status === 'IN_PROGRESS'">Logging In...</div>
-
-    <div
-      v-else-if="status === 'AUTH_FAILED'"
-      class="flex flex-col text-center space-y-2"
-    >
-      <div class="font-semibold text-lg">Authentication Failed</div>
-
-      <button class="hover:text-gray-200" @click="startAuth()">
-        Try Again
-      </button>
-
-      <button @click="$router.go(-1)" class="hover:text-gray-200">Back</button>
+  <div
+    class="w-full h-full flex flex-col justify-center items-center space-y-6"
+  >
+    <div v-if="status === 'IN_PROGRESS'" class="text-xl font-bold">
+      Logging In...
     </div>
 
-    <div
-      v-else-if="status === 'NOT_LINKED'"
-      class="flex flex-col text-center space-y-2"
-    >
-      <div class="font-semibold text-lg">Account Not Linked</div>
+    <template v-else>
+      <div
+        v-if="status === 'NOT_LINKED'"
+        class="flex flex-col justify-center items-center space-y-3"
+      >
+        <div class="text-xl font-bold text-discord-blurple">Not Linked</div>
 
-      <div>
-        Before you can log in, you need to link your Discord account on our
-        Discord server.
+        <div>
+          Before you can log in, you must first link your account in our Discord
+          server.
+        </div>
       </div>
 
-      <button
-        class="hover:text-gray-200"
-        @click="openExternal('https://discord.gg/XyEv5JQ53S')"
+      <div
+        v-else-if="status === 'AUTH_FAILED'"
+        class="text-xl font-bold text-red-500"
       >
-        Join Discord Server
-      </button>
+        Authentication Failed
+      </div>
 
-      <button class="hover:text-gray-200" @click="startAuth()">
-        Try Again
-      </button>
+      <div class="flex space-x-3">
+        <div
+          v-if="status === 'NOT_LINKED'"
+          class="
+            border border-2
+            py-1
+            px-3
+            hover:bg-gray-700
+            text-discord-blurple
+            border-discord-blurple
+          "
+          @click="openExternal('https://discord.gg/neypgUkchH')"
+        >
+          Discord
+        </div>
 
-      <button @click="$router.go(-1)" class="hover:text-gray-200">Back</button>
-    </div>
+        <div
+          class="border border-2 py-1 px-3 hover:bg-gray-700"
+          @click="start()"
+        >
+          Try Again
+        </div>
+
+        <div
+          class="
+            border border-2 border-gray-300
+            text-gray-300
+            py-1
+            px-3
+            hover:bg-gray-700
+          "
+          @click="$router.go(-1)"
+        >
+          Back
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import gql from 'graphql-tag'
 import Vue from 'vue'
+import gql from 'graphql-tag'
 import { onLogin } from '@/vue-apollo'
+import { IpcRendererEvent } from 'electron'
 
 enum Status {
   IN_PROGRESS = 'IN_PROGRESS',
-  AUTH_FAILED = 'AUTH_FAILED',
   NOT_LINKED = 'NOT_LINKED',
+  AUTH_FAILED = 'AUTH_FAILED',
 }
 
 export default Vue.extend({
@@ -60,27 +85,24 @@ export default Vue.extend({
       code: null as string | null,
     }
   },
-  mounted() {
-    this.startAuth()
-
-    window.ipcRenderer.on('discordAuthCode', (event, code: string) => {
+  methods: {
+    start() {
+      this.code = null
+      this.status = Status.IN_PROGRESS
+      window.ipcRenderer.send('discordAuthStart')
+    },
+    onCode(event: IpcRendererEvent, code: string) {
       this.code = code
-    })
-
-    window.ipcRenderer.on('discordAuthEnd', async () => {
-      if (this.status !== Status.IN_PROGRESS) return
-
+    },
+    async onEnd() {
       if (this.code === null) {
         this.status = Status.AUTH_FAILED
       } else {
         try {
           const mutation = await this.$apollo.mutate({
             mutation: gql`
-              mutation ($discordCode: String!) {
-                createSessionWithDiscordCode(
-                  discordCode: $discordCode
-                  type: OVERLAY
-                ) {
+              mutation ($code: String!) {
+                createSession(code: $code, type: OVERLAY, provider: DISCORD) {
                   id
                   secret
                   user {
@@ -91,20 +113,19 @@ export default Vue.extend({
               }
             `,
             variables: {
-              discordCode: this.code,
+              code: this.code,
             },
           })
 
-          this.code = null
-
           await onLogin(
             this.$apollo.getClient(),
-            `${mutation.data.createSessionWithDiscordCode.id}.${mutation.data.createSessionWithDiscordCode.secret}`
+            `${mutation.data.createSession.id}.${mutation.data.createSession.secret}`
           )
           await this.$store.dispatch(
             'temp/updateName',
             this.$apollo.getClient()
           )
+
           await this.$router.go(-1)
         } catch (error) {
           if (
@@ -117,16 +138,19 @@ export default Vue.extend({
           }
         }
       }
-    })
-  },
-  methods: {
-    startAuth() {
-      this.status = Status.IN_PROGRESS
-      window.ipcRenderer.send('discordAuthStart')
     },
     openExternal(url: string) {
       window.ipcRenderer.send('openExternal', url)
     },
+  },
+  created() {
+    window.ipcRenderer.on('discordAuthCode', this.onCode)
+    window.ipcRenderer.on('discordAuthEnd', this.onEnd)
+    this.start()
+  },
+  beforeDestroy() {
+    window.ipcRenderer.removeAllListeners('discordAuthCode')
+    window.ipcRenderer.removeAllListeners('discordAuthEnd')
   },
 })
 </script>
