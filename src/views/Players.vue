@@ -139,6 +139,27 @@
                     }}
                   </template>
 
+                  <div
+                    v-else-if="columns[columnKey].getValues"
+                    class="flex justify-center space-x-2"
+                  >
+                    <div
+                      v-for="[text, color] in columns[columnKey].getValues(
+                        player,
+                        $store.getters['config/modePrefix'],
+                        {
+                          shortTags: $store.state.config.shortTags,
+                        }
+                      )"
+                      :key="text"
+                      :style="{
+                        color: '#' + color.toString(16).padStart(6, '0'),
+                      }"
+                    >
+                      {{ text }}
+                    </div>
+                  </div>
+
                   <template v-else>
                     {{
                       columns[columnKey].getDisplayValue
