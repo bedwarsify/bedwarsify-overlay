@@ -210,7 +210,11 @@
           </svg>
         </button>
 
-        <button class="no-drag p-2 hover:bg-gray-700" @click="close()">
+        <button
+          class="no-drag p-2 hover:bg-gray-700"
+          :class="{ 'rounded-tr-[8px]': $store.state.config.roundedCorners }"
+          @click="close()"
+        >
           <svg
             class="w-6 h-6"
             fill="none"

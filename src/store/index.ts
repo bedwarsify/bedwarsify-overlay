@@ -676,6 +676,7 @@ const store = new Vuex.Store({
         fontFamilyCustom: '',
         textShadow: TextShadow.PLAYERS_ONLY,
         columnLabels: ColumnLabels.NORMAL,
+        roundedCorners: true,
       }),
       getters: {
         modePrefix: (state) =>
