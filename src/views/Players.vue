@@ -149,6 +149,8 @@
                         $store.getters['config/modePrefix'],
                         {
                           shortTags: $store.state.config.shortTags,
+                          players: $store.state.temp.players,
+                          partyDetection: $store.state.config.partyDetection,
                         }
                       )"
                       :key="text"

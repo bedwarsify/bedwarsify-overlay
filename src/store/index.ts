@@ -133,6 +133,8 @@ type ColumnDefinition = {
           modePrefix: string,
           options?: {
             shortTags?: boolean
+            players?: Player[]
+            partyDetection?: boolean
           }
         ) => [string, number][]
       }
@@ -192,6 +194,19 @@ export const columns: { [p: string]: ColumnDefinition } = {
         values.push([options?.shortTags ? '[H?]' : '[HACK?]', 0xfca5a5])
       } else if (player.suspicious) {
         values.push([options?.shortTags ? '[S@]' : '[SNIP@]', 0xfca5a5])
+      }
+
+      if (
+        options?.partyDetection &&
+        (player.hypixelPlayer?.channel === 'PARTY' ||
+          ((player.hypixelPlayer?.stats.Bedwars?.winstreak || 0) >= 3 &&
+            (options?.players?.filter(
+              (player) =>
+                player.hypixelPlayer?.stats.Bedwars?.winstreak ===
+                player.hypixelPlayer?.stats.Bedwars?.winstreak
+            ).length || 0) >= 2))
+      ) {
+        values.push([options?.shortTags ? '[P]' : '[PARTY]', 0xe879f9])
       }
 
       return values
@@ -661,6 +676,7 @@ const store = new Vuex.Store({
         textShadow: TextShadow.PLAYERS_ONLY,
         columnLabels: ColumnLabels.NORMAL,
         roundedCorners: true,
+        partyDetection: true,
       }),
       getters: {
         modePrefix: (state) =>
