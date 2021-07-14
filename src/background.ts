@@ -48,6 +48,7 @@ async function createWindow() {
   })
 
   win = new BrowserWindow({
+    title: 'Bedwarsify Overlay',
     width: winState.width,
     height: winState.height,
     x: winState.x,
