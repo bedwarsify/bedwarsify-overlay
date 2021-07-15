@@ -187,7 +187,7 @@
                 </template>
 
                 <span v-else-if="columnKey === 'TAG'" class="text-green-500">
-                  {{ $store.state.config.shortTags ? '[N]' : '[NICKED]' }}
+                  {{ $store.state.config.shortTags ? '[N]' : '[NICK]' }}
                 </span>
 
                 <template v-else> ? </template>
