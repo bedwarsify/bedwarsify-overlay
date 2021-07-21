@@ -113,7 +113,7 @@ if (process.platform === 'linux') {
 
 app.on('ready', async () => {
   if (process.platform === 'linux') {
-    await wait(300)
+    await wait(500)
   }
 
   if (isDevelopment && !process.env.IS_TEST) {
