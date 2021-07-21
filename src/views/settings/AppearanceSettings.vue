@@ -324,7 +324,7 @@
           @click="
             $store.commit('config/set', ['customBackgroundColor', '#18181b'])
           "
-          class="border border-2 p-1 hover:bg-gray-700 text-red-400"
+          class="border border-2 p-1 hover:bg-gray-700"
         >
           <svg
             class="w-6 h-6"
@@ -334,8 +334,8 @@
           >
             <path
               v-if="$store.state.config.customBackgroundColor !== '#18181b'"
-              d="M5 5h2v2H5V5zm4 4H7V7h2v2zm2 2H9V9h2v2zm2 0h-2v2H9v2H7v2H5v2h2v-2h2v-2h2v-2h2v2h2v2h2v2h2v-2h-2v-2h-2v-2h-2v-2zm2-2v2h-2V9h2zm2-2v2h-2V7h2zm0 0V5h2v2h-2z"
               fill="currentColor"
+              d="M4 11h16v2H4z"
             />
           </svg>
         </button>
