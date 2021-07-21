@@ -49,6 +49,7 @@ async function createWindow() {
 
   win = new BrowserWindow({
     title: 'Bedwarsify Overlay',
+    icon: path.join(__dirname, '../build/icon.png'),
     width: winState.width,
     height: winState.height,
     x: winState.x,
