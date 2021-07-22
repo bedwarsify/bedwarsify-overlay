@@ -12,6 +12,7 @@
             <th
               v-for="columnKey in $store.getters['config/activeColumns']"
               :key="columnKey"
+              class="font-normal"
             >
               <button
                 @click="switchSort(columnKey)"
