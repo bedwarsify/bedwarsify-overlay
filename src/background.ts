@@ -58,6 +58,8 @@ async function createWindow() {
     transparent: true,
     alwaysOnTop: true,
     hasShadow: process.platform !== 'darwin',
+    maximizable: false,
+    fullscreenable: false,
     webPreferences: {
       nodeIntegration: process.env
         .ELECTRON_NODE_INTEGRATION as unknown as boolean,
