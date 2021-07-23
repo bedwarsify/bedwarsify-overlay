@@ -1,8 +1,8 @@
 <template>
-  <div class="drag">
+  <div>
     <div class="flex justify-between">
-      <div class="flex items-center flex-shrink-0">
-        <div class="p-2">
+      <div class="flex items-center drag flex-grow m-px">
+        <div class="p-[calc(0.5rem-2px)] pr-2">
           <img src="../assets/icon.svg" alt="" class="w-6 h-6" />
         </div>
 
@@ -10,7 +10,7 @@
       </div>
 
       <div
-        class="flex items-center justify-end flex-grow"
+        class="flex items-center justify-end"
         v-if="!$store.state.temp.capturingScreenshot"
       >
         <div class="flex flex-grow items-center justify-end ml-3 mr-2">

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-screen h-screen text-white flex flex-col select-none p-px"
+    class="w-screen h-screen text-white flex flex-col select-none"
     :class="{
       'text-shadow': $store.state.config.textShadow === 'ENABLED',
       'rounded-[8px]': $store.state.config.roundedCorners,
