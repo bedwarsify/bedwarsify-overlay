@@ -19,7 +19,6 @@
                 v-if="columns[columnKey].sort !== 'NONE'"
                 class="
                   hover:text-gray-200
-                  font-bold
                   flex
                   justify-center
                   w-full
