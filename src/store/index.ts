@@ -677,6 +677,7 @@ const store = new Vuex.Store({
         columnLabels: ColumnLabels.NORMAL,
         roundedCorners: true,
         partyDetection: true,
+        dismissedPatreonReminder: false,
       }),
       getters: {
         modePrefix: (state) =>
@@ -890,6 +891,8 @@ const store = new Vuex.Store({
         capturingScreenshot: false,
         playersCount: null as number | null,
         launchSettingsVisible: null as boolean | null,
+        startedAt: new Date(),
+        now: new Date(),
       }),
       mutations: {
         setApiKeyValid(state, newValue) {
@@ -929,6 +932,9 @@ const store = new Vuex.Store({
         },
         setLaunchSettingsVisible(state, newValue: boolean | null) {
           state.launchSettingsVisible = newValue
+        },
+        updateNow(state) {
+          state.now = new Date()
         },
       },
       actions: {

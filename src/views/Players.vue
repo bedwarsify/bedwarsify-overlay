@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full flex flex-col"
+    class="w-full h-full flex flex-col overflow-auto"
     :class="{
       'text-shadow': $store.state.config.textShadow === 'PLAYERS_ONLY',
     }"

@@ -33,6 +33,10 @@ export default Vue.extend({
   components: { TitleBar },
   methods: {
     async updateApiKeyValid() {
+      setInterval(() => {
+        this.$store.commit('temp/updateNow')
+      }, 1e2)
+
       this.$store.commit('temp/setApiKeyValid', null)
 
       if (
