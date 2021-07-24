@@ -201,8 +201,8 @@ export const columns: { [p: string]: ColumnDefinition } = {
         (player.hypixelPlayer?.channel === 'PARTY' ||
           ((player.hypixelPlayer?.stats.Bedwars?.winstreak || 0) >= 3 &&
             (options?.players?.filter(
-              (player) =>
-                player.hypixelPlayer?.stats.Bedwars?.winstreak ===
+              (p) =>
+                p.hypixelPlayer?.stats.Bedwars?.winstreak ===
                 player.hypixelPlayer?.stats.Bedwars?.winstreak
             ).length || 0) >= 2))
       ) {
