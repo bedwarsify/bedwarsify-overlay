@@ -51,7 +51,11 @@
       <span
         :class="
           'text-minecraft-' +
-          (player.hypixelPlayer.rankPlusColor || 'gold')
+          (
+            (player.hypixelPlayerRank.cleanName !== 'VIP+' &&
+              player.hypixelPlayer.rankPlusColor) ||
+            'gold'
+          )
             .toLowerCase()
             .replace('_', '-')
         "
