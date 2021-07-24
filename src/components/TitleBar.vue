@@ -28,19 +28,49 @@
                 class="
                   bg-transparent
                   border border-2 border-gray-400
-                  px-1
+                  px-2
                   w-full
-                  no-drag
+                  hover:bg-gray-700
+                  focus:bg-gray-700
                 "
                 :style="$store.getters['config/opacityStyle']"
               />
             </div>
 
-            <mode-select no-label class="p-2 no-drag" />
+            <div class="mx-2">
+              <select
+                :value="$store.state.config.mode"
+                @change="
+                  $store.commit('config/set', ['mode', $event.target.value])
+                "
+                class="
+                  bg-transparent
+                  appearance-none
+                  border border-2 border-gray-400
+                  px-2
+                  hover:bg-gray-700
+                  focus:bg-gray-700
+                "
+              >
+                <option
+                  v-for="[key, mode] of Object.entries(modes).filter(
+                    ([key, mode]) =>
+                      mode.dream
+                        ? $store.state.config.showDreamModes ||
+                          key === $store.state.config.mode
+                        : true
+                  )"
+                  :key="key"
+                  :value="key"
+                >
+                  {{ mode.displayName }}
+                </option>
+              </select>
+            </div>
 
             <button
               @click="$store.commit('temp/clearPlayers')"
-              class="p-2 hover:bg-gray-700 no-drag"
+              class="p-2 hover:bg-gray-700"
             >
               <svg
                 class="w-6 h-6"
@@ -57,7 +87,7 @@
           </template>
 
           <div class="group relative">
-            <button class="p-2 hover:bg-gray-700 no-drag">
+            <button class="p-2 hover:bg-gray-700">
               <svg
                 class="w-6 h-6"
                 fill="none"
@@ -83,14 +113,7 @@
             >
               <router-link
                 to="/"
-                class="
-                  p-2
-                  hover:bg-gray-700
-                  no-drag
-                  flex
-                  space-x-2
-                  items-center
-                "
+                class="p-2 hover:bg-gray-700 flex space-x-2 items-center"
                 exact-active-class="bg-gray-800"
               >
                 <svg
@@ -116,14 +139,7 @@
               >
                 <router-link
                   to="/nicks"
-                  class="
-                    p-2
-                    hover:bg-gray-700
-                    no-drag
-                    flex
-                    space-x-2
-                    items-center
-                  "
+                  class="p-2 hover:bg-gray-700 flex space-x-2 items-center"
                   active-class="bg-gray-800"
                 >
                   <svg
@@ -143,14 +159,7 @@
 
                 <router-link
                   to="/tracking"
-                  class="
-                    p-2
-                    hover:bg-gray-700
-                    no-drag
-                    flex
-                    space-x-2
-                    items-center
-                  "
+                  class="p-2 hover:bg-gray-700 flex space-x-2 items-center"
                   active-class="bg-gray-800"
                 >
                   <svg
@@ -171,14 +180,7 @@
 
               <router-link
                 to="/settings"
-                class="
-                  p-2
-                  hover:bg-gray-700
-                  no-drag
-                  flex
-                  space-x-2
-                  items-center
-                "
+                class="p-2 hover:bg-gray-700 flex space-x-2 items-center"
                 active-class="bg-gray-800"
               >
                 <svg
@@ -199,7 +201,7 @@
           </div>
         </div>
 
-        <button class="no-drag p-2 hover:bg-gray-700" @click="minimize()">
+        <button class="p-2 hover:bg-gray-700" @click="minimize()">
           <svg
             class="w-6 h-6"
             fill="none"
@@ -211,7 +213,7 @@
         </button>
 
         <button
-          class="no-drag p-2 hover:bg-gray-700"
+          class="p-2 hover:bg-gray-700"
           :class="{ 'rounded-tr-[8px]': $store.state.config.roundedCorners }"
           @click="close()"
         >
@@ -234,15 +236,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ModeSelect from '@/components/ModeSelect.vue'
+import { modes } from '@/store'
 
 export default Vue.extend({
-  components: { ModeSelect },
   data() {
     return {
       menu: false,
       manualAddPlayerName: '',
     }
+  },
+  computed: {
+    modes() {
+      return modes
+    },
   },
   methods: {
     minimize(): void {
