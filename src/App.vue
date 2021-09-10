@@ -212,7 +212,7 @@ export default Vue.extend({
         return
       }
 
-      if (/^\s+$/.test(message)) {
+      if (/^\s{7}$/.test(message) || /^\s{25}$/.test(message)) {
         if (this.$store.state.config.autoRemoveAllOnServerChange) {
           this.$store.commit('temp/clearPlayers')
         }
