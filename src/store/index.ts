@@ -199,11 +199,11 @@ export const columns: { [p: string]: ColumnDefinition } = {
       if (
         options?.partyDetection &&
         (player.hypixelPlayer?.channel === 'PARTY' ||
-          ((player.hypixelPlayer?.stats.Bedwars?.winstreak || 0) >= 3 &&
+          ((player.hypixelPlayer?.stats?.Bedwars?.winstreak || 0) >= 3 &&
             (options?.players?.filter(
               (p) =>
-                p.hypixelPlayer?.stats.Bedwars?.winstreak ===
-                player.hypixelPlayer?.stats.Bedwars?.winstreak
+                p.hypixelPlayer?.stats?.Bedwars?.winstreak ===
+                player.hypixelPlayer?.stats?.Bedwars?.winstreak
             ).length || 0) >= 2))
       ) {
         values.push([options?.shortTags ? '[P]' : '[PARTY]', 0xe879f9])
@@ -238,10 +238,10 @@ export const columns: { [p: string]: ColumnDefinition } = {
     getSortValue: (player, modePrefix) => {
       return (
         (player.hypixelBedwarsLevelInfo?.level || 0) *
-        (((player.hypixelPlayer?.stats.Bedwars?.[
+        (((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'final_kills_bedwars'
         ] as number | undefined) || 0) /
-          ((player.hypixelPlayer?.stats.Bedwars?.[
+          ((player.hypixelPlayer?.stats?.Bedwars?.[
             modePrefix + 'final_deaths_bedwars'
           ] as number | undefined) || 1)) **
           2
@@ -260,7 +260,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'winstreak'] as
+        (player.hypixelPlayer?.stats?.Bedwars?.[modePrefix + 'winstreak'] as
           | number
           | undefined) || 0
       )
@@ -277,7 +277,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'final_kills_bedwars'
         ] as number | undefined) || 0
       )
@@ -294,7 +294,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'final_deaths_bedwars'
         ] as number | undefined) || 0
       )
@@ -310,10 +310,10 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'final_kills_bedwars'
         ] as number | undefined) || 0) /
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'final_deaths_bedwars'
         ] as number | undefined) || 1)
       )
@@ -329,7 +329,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'wins_bedwars'] as
+        (player.hypixelPlayer?.stats?.Bedwars?.[modePrefix + 'wins_bedwars'] as
           | number
           | undefined) || 0
       )
@@ -345,7 +345,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'losses_bedwars'
         ] as number | undefined) || 0
       )
@@ -361,10 +361,10 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        ((player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'wins_bedwars'] as
-          | number
-          | undefined) || 0) /
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
+          modePrefix + 'wins_bedwars'
+        ] as number | undefined) || 0) /
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'losses_bedwars'
         ] as number | undefined) || 1)
       )
@@ -381,7 +381,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'beds_broken_bedwars'
         ] as number | undefined) || 0
       )
@@ -398,7 +398,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'beds_lost_bedwars'
         ] as number | undefined) || 0
       )
@@ -413,10 +413,10 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'beds_broken_bedwars'
         ] as number | undefined) || 0) /
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'beds_lost_bedwars'
         ] as number | undefined) || 1)
       )
@@ -432,9 +432,9 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[modePrefix + 'kills_bedwars'] as
-          | number
-          | undefined) || 0
+        (player.hypixelPlayer?.stats?.Bedwars?.[
+          modePrefix + 'kills_bedwars'
+        ] as number | undefined) || 0
       )
     },
     customDisplay: false,
@@ -448,7 +448,7 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        (player.hypixelPlayer?.stats.Bedwars?.[
+        (player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'deaths_bedwars'
         ] as number | undefined) || 0
       )
@@ -464,10 +464,10 @@ export const columns: { [p: string]: ColumnDefinition } = {
     sort: Sort.VALUE,
     getSortValue: (player, modePrefix) => {
       return (
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'kills_bedwars'
         ] as number | undefined) || 0) /
-        ((player.hypixelPlayer?.stats.Bedwars?.[
+        ((player.hypixelPlayer?.stats?.Bedwars?.[
           modePrefix + 'deaths_bedwars'
         ] as number | undefined) || 1)
       )
@@ -1034,7 +1034,7 @@ const store = new Vuex.Store({
               )
 
               const hypixelBedwarsLevelInfo =
-                hypixelPlayer.stats.Bedwars !== undefined
+                hypixelPlayer.stats?.Bedwars !== undefined
                   ? await window.ipcRenderer.invoke(
                       'hypixelUtils',
                       'getBedwarsLevelInfo',
