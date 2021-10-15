@@ -13,6 +13,29 @@
     <title-bar />
 
     <router-view class="overflow-auto flex-grow" />
+
+    <div
+      class="p-2 rounded-b-[8px] flex justify-center items-center space-x-6"
+      :style="{
+        backgroundColor: `rgba(0, 200, 83, ${$store.state.config.opacity})`,
+      }"
+      @click="openExternal('https://cubelify.com/overlay')"
+    >
+      <div>Cubelify Overlay is now available.</div>
+
+      <button
+        class="
+          border border-2
+          py-1
+          px-3
+          hover:bg-gray-700
+          border-gray-200
+          text-gray-200
+        "
+      >
+        Get
+      </button>
+    </div>
   </div>
 </template>
 
@@ -32,6 +55,9 @@ export default Vue.extend({
   },
   components: { TitleBar },
   methods: {
+    openExternal(url: string) {
+      window.ipcRenderer.send('openExternal', url)
+    },
     async updateApiKeyValid() {
       setInterval(() => {
         this.$store.commit('temp/updateNow')
