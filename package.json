@@ -22,7 +22,7 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@logdna/tail-file": "^2.0.6",
+    "@logdna/tail-file": "^2.1.0",
     "@zikeji/hypixel": "^3.1.1",
     "axios": "^0.21.1",
     "dexie": "^3.0.3",
