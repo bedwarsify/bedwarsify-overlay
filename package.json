@@ -34,7 +34,7 @@
     "uuid": "^3.4.0",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.0-beta.11",
-    "vue-router": "^3.2.0",
+    "vue-router": "^3.5.2",
     "vuex": "^3.4.0",
     "vuex-persistedstate": "^4.0.0-beta.3"
   },
